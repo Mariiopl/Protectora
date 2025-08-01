@@ -2,10 +2,19 @@ package com.protectora.backend.model;
 
 // ==================== APADRINAMIENTOS ====================
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "Apadrinamientos")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Apadrinamiento {
 
     @Id

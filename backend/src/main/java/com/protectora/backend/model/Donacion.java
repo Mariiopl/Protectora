@@ -2,10 +2,19 @@ package com.protectora.backend.model;
 
 // ==================== DONACIONES ====================
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "Donaciones")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Donacion {
 
     @Id

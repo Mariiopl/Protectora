@@ -2,11 +2,20 @@ package com.protectora.backend.model;
 
 // ==================== MASCOTAS ====================
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "Mascotas")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Mascota {
 
     @Id
@@ -26,7 +35,7 @@ public class Mascota {
     private Sexo sexo;
 
     @Column(name = "carácter")
-    private String caracter;
+    private String carácter;
 
     @Column(name = "necesidades_especiales")
     private String necesidadesEspeciales;

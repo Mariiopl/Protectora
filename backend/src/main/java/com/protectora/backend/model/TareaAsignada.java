@@ -2,9 +2,17 @@ package com.protectora.backend.model;
 
 // ==================== TAREAS ASIGNADAS ====================
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "TareasAsignadas")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class TareaAsignada {
 
     @Id
