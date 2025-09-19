@@ -1,7 +1,8 @@
 package com.protectora.backend.model;
 
-// ==================== HORAS TRABAJADAS ====================
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,8 +25,20 @@ public class HorasTrabajadas {
 
     @ManyToOne
     @JoinColumn(name = "id_empleado")
+    @NotNull(message = "El empleado es obligatorio")
     private Empleado empleado;
 
+    @NotNull(message = "La fecha es obligatoria")
     private LocalDate fecha;
+
+    @NotNull(message = "Las horas trabajadas son obligatorias")
+    @Min(value = 0, message = "Las horas no pueden ser negativas")
     private Double horas;
 }
+// {
+// "empleado": {
+// "idEmpleado": 1
+// },
+// "fecha": "2025-09-19",
+// "horas": 8.5
+// }
