@@ -1,0 +1,96 @@
+/* Fondo */
+.login-container,
+.register-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  font-family: Arial, sans-serif;
+}
+
+/* Tarjeta */
+.login-container form,
+.register-container form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Título */
+.login-container h2,
+.register-container h2 {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+/* Inputs */
+.login-container input,
+.register-container input,
+.register-container select {
+  width: 100%;
+  padding: 12px;
+  margin: 0.5rem 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border 0.3s;
+}
+
+.login-container input:focus,
+.register-container input:focus,
+.register-container select:focus {
+  border-color: #2575fc;
+  outline: none;
+}
+
+/* Botón */
+.login-container button,
+.register-container button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 1rem;
+  background: #2575fc;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-container button:hover,
+.register-container button:hover {
+  background: #1a5ed9;
+}
+
+/* Links */
+.login-container p,
+.register-container p {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.login-container a,
+.register-container a {
+  color: #2575fc;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-container a:hover,
+.register-container a:hover {
+  text-decoration: underline;
+}
+
+/* Error */
+.error {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}

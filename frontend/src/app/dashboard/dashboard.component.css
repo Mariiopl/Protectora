@@ -1,0 +1,131 @@
+/* dashboard.component.css */
+
+/* Contenedor principal */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  color: #333;
+}
+
+/* Barra lateral */
+.sidebar {
+  width: 220px;
+  background-color: #2c3e50;
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar h2 {
+  margin-bottom: 30px;
+  font-size: 22px;
+}
+
+.sidebar a {
+  color: #fff;
+  text-decoration: none;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.2s;
+}
+
+.sidebar a:hover {
+  background-color: #34495e;
+}
+
+/* Contenido principal */
+.main-content {
+  flex: 1;
+  padding: 30px;
+}
+
+/* Títulos */
+.main-content h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+/* Tarjetas de información */
+.card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Grillas de tarjetas */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+/* Botones */
+button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+/* Tablas de datos */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #3498db;
+  color: #fff;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .sidebar a {
+    margin: 0 10px;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+}
