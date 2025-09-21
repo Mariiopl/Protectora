@@ -2,6 +2,7 @@ package com.protectora.backend.services;
 
 import com.protectora.backend.model.Usuario;
 import com.protectora.backend.repository.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +12,11 @@ import java.util.Optional;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // Obtener todos los usuarios
@@ -26,9 +29,24 @@ public class UsuarioService {
         return usuarioRepository.findById(id);
     }
 
-    // Guardar o actualizar usuario
+    // Guardar o actualizar usuario (sin encriptar)
     public Usuario save(Usuario usuario) {
         return usuarioRepository.save(usuario);
+    }
+
+    // Guardar nuevo usuario con contraseña encriptada
+    public Usuario register(Usuario usuario) {
+        usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
+        return usuarioRepository.save(usuario);
+    }
+
+    // Login: devuelve usuario si la contraseña coincide
+    public Optional<Usuario> login(String email, String password) {
+        Optional<Usuario> userOpt = usuarioRepository.findByEmail(email);
+        if (userOpt.isPresent() && passwordEncoder.matches(password, userOpt.get().getContrasena())) {
+            return userOpt;
+        }
+        return Optional.empty();
     }
 
     // Eliminar usuario por ID
@@ -36,12 +54,12 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    // Buscar usuario por email (para login)
+    // Buscar usuario por email
     public Optional<Usuario> findByEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }
 
-    // Buscar usuario por nombre (para Spring Security)
+    // Buscar usuario por nombre
     public Optional<Usuario> findByNombre(String nombre) {
         return usuarioRepository.findByNombre(nombre);
     }
