@@ -24,7 +24,7 @@ export class LoginComponent {
       .subscribe({
         next: (res) => {
           localStorage.setItem('token', res.token);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/catalogo']);
         },
         error: () => {
           this.errorMessage = 'Credenciales incorrectas';

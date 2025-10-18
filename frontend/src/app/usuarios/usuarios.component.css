@@ -1,0 +1,45 @@
+.usuarios-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  text-align: center;
+  color: #a30000; /* rojo temático de protectora */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #a30000;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #ffcccc;
+}
+
+tr:nth-child(even) {
+  background-color: #ffe6e6;
+}
+
+button {
+  margin-right: 5px;
+  padding: 4px 8px;
+  background-color: #a30000;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #cc0000;
+}

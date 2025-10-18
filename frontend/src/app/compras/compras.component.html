@@ -1,0 +1,34 @@
+<div class="compras-container">
+  <h2>Lista de Compras</h2>
+
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <table *ngIf="compras.length > 0">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Proveedor</th>
+        <th>Fecha</th>
+        <th>Cantidad</th>
+        <th>Costo Total</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let compra of compras">
+        <td>{{ compra.producto.idProducto }}</td>
+        <td>{{ compra.proveedor }}</td>
+        <td>{{ compra.fecha }}</td>
+        <td>{{ compra.cantidad }}</td>
+        <td>{{ compra.costoTotal }}</td>
+        <td>
+          <button (click)="eliminarCompra(compra.idCompra!)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="compras.length === 0 && !error">
+    No hay compras disponibles.
+  </div>
+</div>

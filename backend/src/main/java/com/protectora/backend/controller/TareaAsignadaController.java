@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tareas-asignadas")
-@CrossOrigin(origins = "*")
 public class TareaAsignadaController {
 
     private final TareaAsignadaService tareaAsignadaService;

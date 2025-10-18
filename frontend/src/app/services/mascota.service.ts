@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Mascota {
@@ -21,6 +21,11 @@ export class MascotaService {
   constructor(private http: HttpClient) {}
 
   getAdoptables(): Observable<Mascota[]> {
-    return this.http.get<Mascota[]>(`${this.apiUrl}`);
+    const token = localStorage.getItem('token'); // <- token guardado al hacer login
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<Mascota[]>(this.apiUrl, { headers });
   }
 }

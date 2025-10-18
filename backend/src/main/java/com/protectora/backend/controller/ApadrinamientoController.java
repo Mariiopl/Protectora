@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/apadrinamientos")
-@CrossOrigin(origins = "*")
 public class ApadrinamientoController {
 
     private final ApadrinamientoService apadrinamientoService;

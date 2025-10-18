@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/api/mascotas")
-@CrossOrigin(origins = "*")
+
 public class MascotaController {
 
     private final MascotaService mascotaService;
@@ -65,14 +65,14 @@ public class MascotaController {
                     mascota.setEdad(mascotaDetails.getEdad());
                     mascota.setTamaño(mascotaDetails.getTamaño());
                     mascota.setSexo(mascotaDetails.getSexo());
-                    mascota.setCarácter(mascotaDetails.getCarácter());
+                    mascota.setCaracter(mascotaDetails.getCaracter());
                     mascota.setNecesidadesEspeciales(mascotaDetails.getNecesidadesEspeciales());
                     mascota.setEsterilizado(mascotaDetails.getEsterilizado());
                     mascota.setVacunado(mascotaDetails.getVacunado());
                     mascota.setDesparasitado(mascotaDetails.getDesparasitado());
                     mascota.setEstadoAdopcion(mascotaDetails.getEstadoAdopcion());
                     mascota.setHistoria(mascotaDetails.getHistoria());
-                    mascota.setUbicación(mascotaDetails.getUbicación());
+                    mascota.setUbicacion(mascotaDetails.getUbicacion());
                     mascota.setFechaIngreso(mascotaDetails.getFechaIngreso());
                     Mascota updated = mascotaService.save(mascota);
                     return ResponseEntity.ok(updated);

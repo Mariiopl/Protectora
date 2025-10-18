@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4200") // Permite peticiones desde Angular
 @RestController
 @RequestMapping("/auth")
 public class AuthController {

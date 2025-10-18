@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/empleados")
-@CrossOrigin(origins = "*")
 public class EmpleadoController {
 
     private final EmpleadoService empleadoService;

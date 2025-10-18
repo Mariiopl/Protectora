@@ -51,9 +51,9 @@ public class Mascota {
     @Enumerated(EnumType.STRING)
     private Sexo sexo;
 
-    @Column(name = "carácter")
+    @Column(name = "caracter")
     @Size(max = 200, message = "El carácter no puede superar los 200 caracteres")
-    private String carácter;
+    private String caracter;
 
     @Column(name = "necesidades_especiales")
     @Size(max = 500, message = "Las necesidades especiales no pueden superar los 500 caracteres")
@@ -64,16 +64,16 @@ public class Mascota {
     private Boolean desparasitado;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado_adopción")
+    @Column(name = "estado_adopcion")
     private EstadoAdopcion estadoAdopcion = EstadoAdopcion.adoptable;
 
     @Column(name = "historia")
     @Size(max = 1000, message = "La historia no puede superar los 1000 caracteres")
     private String historia;
 
-    @Column(name = "ubicación")
+    @Column(name = "ubicacion")
     @Size(max = 200, message = "La ubicación no puede superar los 200 caracteres")
-    private String ubicación;
+    private String ubicacion;
 
     @Column(name = "fecha_ingreso")
     private LocalDate fechaIngreso;
