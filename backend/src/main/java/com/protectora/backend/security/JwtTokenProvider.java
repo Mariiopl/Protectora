@@ -31,9 +31,7 @@ public class JwtTokenProvider {
     @Value("${app.security.protectora.expiration}")
     private Long jwtDurationSeconds;
 
-    public String generateToken(Authentication authentication) {
-        Usuario user = (Usuario) authentication.getPrincipal();
-
+    public String generateToken(Usuario user) {
         return Jwts.builder()
                 .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS512)
                 .setHeaderParam("typ", "JWT")
@@ -41,6 +39,7 @@ public class JwtTokenProvider {
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtDurationSeconds * 1000))
                 .claim("username", user.getNombre())
+                .claim("tipoUsuario", user.getTipoUsuario())
                 .compact();
     }
 

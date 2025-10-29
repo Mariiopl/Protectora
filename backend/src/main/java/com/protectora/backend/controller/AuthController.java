@@ -1,10 +1,12 @@
 package com.protectora.backend.controller;
 
 import com.protectora.backend.model.Usuario;
+import com.protectora.backend.security.JwtTokenProvider;
 import com.protectora.backend.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -12,10 +14,12 @@ import java.util.Optional;
 public class AuthController {
 
     private final UsuarioService usuarioService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public AuthController(UsuarioService usuarioService) {
+    public AuthController(UsuarioService usuarioService, JwtTokenProvider jwtTokenProvider) {
         this.usuarioService = usuarioService;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     // Registro de usuario
@@ -24,12 +28,21 @@ public class AuthController {
         return usuarioService.register(usuario);
     }
 
-    // Login de usuario
+    // Login de usuario (devuelve token + info)
     @PostMapping("/login")
-    public Usuario login(@RequestBody LoginRequest loginRequest) {
+    public Map<String, Object> login(@RequestBody LoginRequest loginRequest) {
         Optional<Usuario> userOpt = usuarioService.login(loginRequest.getEmail(), loginRequest.getContrasena());
         if (userOpt.isPresent()) {
-            return userOpt.get();
+            Usuario user = userOpt.get();
+
+            // Generar token JWT
+            String token = jwtTokenProvider.generateToken(user);
+
+            // Devolver token + nombre + rol
+            return Map.of(
+                    "token", token,
+                    "nombre", user.getNombre(),
+                    "tipoUsuario", user.getTipoUsuario());
         } else {
             throw new RuntimeException("Email o contraseña incorrectos");
         }

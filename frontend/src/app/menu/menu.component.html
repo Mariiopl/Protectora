@@ -21,7 +21,7 @@
       <a routerLink="/empleados">Empleados</a>
     </li>
 
-    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+    <li *appHasRole="'administrador'" routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
       <a routerLink="/perfil">Perfil</a>
     </li>
 
@@ -49,11 +49,20 @@
       <a routerLink="/usuarios">Usuarios</a>
     </li>
 
+    <!-- 🔹 Nombre del usuario -->
+    <div *ngIf="username">
+      <p>Hola, {{ username }} 👋</p>
+    </div>
+
+    <!-- 🔹 Login / Logout -->
     <li class="logout-item" *ngIf="authService.isAuthenticated()">
       <a (click)="logout()" class="logout-link">🔓 Cerrar sesión</a>
     </li>
+
     <li class="logout-item" *ngIf="!authService.isAuthenticated()">
       <a routerLink="/login" class="logout-link login-style">🔐 Iniciar sesión</a>
     </li>
   </ul>
+
+  
 </nav>

@@ -12,7 +12,21 @@ export class AuthService {
 
   // === AUTENTICACIÓN ===
   login(data: { email: string; contrasena: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, data);
+    return new Observable((observer) => {
+      this.http.post<any>(`${this.apiUrl}/login`, data).subscribe({
+        next: (response) => {
+          // Guardamos los datos del usuario
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('nombre', response.nombre);
+          localStorage.setItem('tipoUsuario', response.tipoUsuario);
+
+          this.isLoggedInSubject.next(true);
+          observer.next(response);
+          observer.complete();
+        },
+        error: (err) => observer.error(err),
+      });
+    });
   }
 
   register(data: any): Observable<any> {
@@ -45,27 +59,26 @@ export class AuthService {
     const token = this.getToken();
     if (!token) return null;
     try {
-      return jwtDecode(token);
+      const decoded: any = jwtDecode(token);
+      return decoded;
     } catch (error) {
       console.error('Error decodificando token:', error);
       return null;
     }
   }
 
-  // === ROLES ===
-  getRoles(): string[] {
-    const roles = localStorage.getItem('roles');
-    return roles ? JSON.parse(roles) : [];
-  }
-
-  hasRole(role: string): boolean {
-    const roles = this.getRoles();
-    return this.isLoggedIn() && roles.includes(role);
-  }
-
-  // === USUARIO ===
   getUsername(): string | null {
-    return localStorage.getItem('username');
+    return (
+      localStorage.getItem('nombre') || this.decodeToken()?.username || null
+    );
+  }
+
+  getTipoUsuario(): string | null {
+    return (
+      localStorage.getItem('tipoUsuario') ||
+      this.decodeToken()?.tipoUsuario ||
+      null
+    );
   }
 
   // === GUARDAR DATOS DESPUÉS DEL LOGIN ===
