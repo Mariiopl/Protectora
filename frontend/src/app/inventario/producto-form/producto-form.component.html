@@ -1,0 +1,25 @@
+<h2>Nuevo Producto</h2>
+<form (ngSubmit)="guardarProducto()">
+  <label>Nombre</label>
+  <input type="text" [(ngModel)]="producto.nombre" name="nombre" required />
+
+  <label>Categoría</label>
+  <select [(ngModel)]="producto.categoria" name="categoria">
+    <option value="comida">Comida</option>
+    <option value="medicamento">Medicamento</option>
+    <option value="limpieza">Limpieza</option>
+    <option value="juguetes">Juguetes</option>
+    <option value="otros">Otros</option>
+  </select>
+
+  <label>Cantidad</label>
+  <input type="number" [(ngModel)]="producto.cantidad" name="cantidad" />
+
+  <label>Unidad</label>
+  <input type="text" [(ngModel)]="producto.unidad" name="unidad" />
+
+  <label>Stock mínimo</label>
+  <input type="number" [(ngModel)]="producto.stockMinimo" name="stockMinimo" />
+
+  <button type="submit">Guardar</button>
+</form>

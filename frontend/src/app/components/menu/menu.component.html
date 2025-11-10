@@ -1,0 +1,68 @@
+<nav class="navbar">
+  <ul class="nav-list">
+    
+    <li *appHasRole="'ADMIN'" routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+      <a routerLink="/usuarios">Usuariosss</a>
+    </li>
+
+    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+      <a routerLink="/adopciones">Adopciones</a>
+    </li>
+
+    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+      <a routerLink="/catalogo">Catálogo</a>
+    </li>
+
+    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+      <a routerLink="/compras">Compras</a>
+    </li>
+
+    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+      <a routerLink="/empleados">Empleados</a>
+    </li>
+
+    <li *appHasRole="'administrador'" routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+      <a routerLink="/perfil">Perfil</a>
+    </li>
+
+    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+      <a routerLink="/productos">Productos</a>
+    </li>
+
+    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+      <a routerLink="/seguimientos">Seguimientos</a>
+    </li>
+
+    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+      <a routerLink="/tareas">Tareas</a>
+    </li>
+
+    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+      <a routerLink="/tratamiento">Tratamiento</a>
+    </li>
+
+    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+      <a routerLink="/turnos">Turnos</a>
+    </li>
+
+    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+      <a routerLink="/usuarios">Usuarios</a>
+    </li>
+
+    <!-- 🔹 Nombre del usuario -->
+    <div *ngIf="username">
+      <p>Saludos, {{ username }}</p>
+    </div>
+
+    <!-- 🔹 Login / Logout -->
+    <li class="logout-item" *ngIf="authService.isAuthenticated()">
+      <a (click)="logout()" class="logout-link">🔓 Cerrar sesión</a>
+    </li>
+
+    <li class="logout-item" *ngIf="!authService.isAuthenticated()">
+      <a routerLink="/login" class="logout-link login-style">🔐 Iniciar sesión</a>
+    </li>
+  </ul>
+
+  
+</nav>

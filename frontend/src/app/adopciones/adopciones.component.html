@@ -1,1 +1,32 @@
-<p>adopciones works!</p>
+<div class="container">
+  <h2>Adopciones</h2>
+
+  <div *ngIf="cargando">Cargando adopciones...</div>
+
+  <table *ngIf="!cargando && adopciones.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Mascota</th>
+        <th>Usuario</th>
+        <th>Estado</th>
+        <th>Fecha Solicitud</th>
+        <th>Fecha Adopción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let a of adopciones">
+        <td>{{ a.idAdopcion }}</td>
+        <td>{{ a.idMascota }}</td>
+        <td>{{ a.idUsuario }}</td>
+        <td>{{ a.estado }}</td>
+        <td>{{ a.fechaSolicitud }}</td>
+        <td>{{ a.fechaAdopcion }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!cargando && adopciones.length === 0">
+    <p>No hay adopciones registradas.</p>
+  </div>
+</div>

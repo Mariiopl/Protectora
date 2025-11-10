@@ -1,0 +1,16 @@
+<div class="perfil-container">
+  <h2>Mi Perfil</h2>
+
+  <form>
+    <label>Nombre</label>
+    <input type="text" [(ngModel)]="nombre" name="nombre" />
+
+    <label>Email</label>
+    <input type="email" [(ngModel)]="email" name="email" disabled />
+
+    <label>Rol</label>
+    <input type="text" [(ngModel)]="tipoUsuario" name="tipoUsuario" disabled />
+
+    <button type="button" (click)="guardarPerfil()">💾 Guardar cambios</button>
+  </form>
+</div>

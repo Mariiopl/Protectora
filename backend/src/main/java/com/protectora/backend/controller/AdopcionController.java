@@ -1,5 +1,6 @@
 package com.protectora.backend.controller;
 
+import com.protectora.backend.dto.AdopcionDTO;
 import com.protectora.backend.model.Adopcion;
 import com.protectora.backend.services.AdopcionService;
 import jakarta.validation.Valid;
@@ -20,8 +21,8 @@ public class AdopcionController {
     }
 
     @GetMapping
-    public List<Adopcion> getAllAdopciones() {
-        return adopcionService.findAll();
+    public List<AdopcionDTO> getAll() {
+        return adopcionService.findAllDTO();
     }
 
     @GetMapping("/{id}")

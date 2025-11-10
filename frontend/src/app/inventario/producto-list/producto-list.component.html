@@ -1,0 +1,28 @@
+<h2>Inventario de Productos</h2>
+<div *ngIf="cargando">Cargando productos...</div>
+<div *ngIf="!cargando && productos.length > 0">
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Categoría</th>
+        <th>Cantidad</th>
+        <th>Unidad</th>
+        <th>Stock mínimo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of productos">
+        <td>{{ p.nombre }}</td>
+        <td>{{ p.categoria }}</td>
+        <td>{{ p.cantidad }}</td>
+        <td>{{ p.unidad }}</td>
+        <td>{{ p.stockMinimo }}</td>
+        <td>
+          <button (click)="eliminarProducto(p.idProducto)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

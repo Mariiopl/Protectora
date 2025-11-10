@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Mascota } from '../interfaces/mascota';
+import { Mascota } from '../interfaces/mascota.model';
 
 @Injectable({
   providedIn: 'root',

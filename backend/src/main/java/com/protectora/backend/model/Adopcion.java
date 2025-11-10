@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "Adopciones")
 @Data
@@ -28,6 +30,7 @@ public class Adopcion {
     @ManyToOne
     @JoinColumn(name = "id_usuario")
     @NotNull(message = "El usuario es obligatorio")
+    @JsonIgnore
     private Usuario usuario;
 
     @ManyToOne
