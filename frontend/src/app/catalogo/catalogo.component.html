@@ -1,24 +1,112 @@
 <div class="catalogo-container">
-  <h2>Mascotas Adoptables</h2>
+  <h2>Mascotas</h2>
 
   <div *ngIf="cargando">Cargando mascotas...</div>
 
   <div class="grid" *ngIf="!cargando && mascotas.length > 0">
     <div class="card" *ngFor="let mascota of mascotas">
-      <img [src]="mascota.imagenUrl" alt="{{mascota.nombre}}" />
+      <img [src]="mascota.imagenUrl || 'assets/img/default-pet.jpg'" alt="{{ mascota.nombre }}" />
       <h3>{{ mascota.nombre }}</h3>
+
+      <!-- Información básica -->
       <p><strong>Especie:</strong> {{ mascota.especie }}</p>
       <p><strong>Raza:</strong> {{ mascota.raza }}</p>
       <p><strong>Edad:</strong> {{ mascota.edad }} años</p>
-      <p class="desc">{{ mascota.descripcion }}</p>
-      <button>Adoptar</button>
-      <br>
-      <button>Más información</button>
-      
+      <p><strong>Sexo:</strong> {{ mascota.sexo }}</p>
+      <p><strong>Tamaño:</strong> {{ mascota.tamano }}</p>
+
+      <!-- Mostrar más info si el usuario hace clic -->
+      <div *ngIf="mascota.mostrarDetalles">
+        <p><strong>Carácter:</strong> {{ mascota.caracter }}</p>
+        <p><strong>Necesidades especiales:</strong> {{ mascota.necesidadesEspeciales || 'Ninguna' }}</p>
+        <p><strong>Esterilizado:</strong> {{ mascota.esterilizado ? 'Sí' : 'No' }}</p>
+        <p><strong>Vacunado:</strong> {{ mascota.vacunado ? 'Sí' : 'No' }}</p>
+        <p><strong>Desparasitado:</strong> {{ mascota.desparasitado ? 'Sí' : 'No' }}</p>
+        <p><strong>Estado adopción:</strong> {{ mascota.estadoAdopcion }}</p>
+        <p><strong>Ubicación:</strong> {{ mascota.ubicacion }}</p>
+        <p><strong>Fecha ingreso:</strong> {{ mascota.fechaIngreso }}</p>
+        <p class="desc"><strong>Historia:</strong> {{ mascota.historia }}</p>
+      </div>
+
+      <!-- Botones -->
+      <button (click)="toggleDetalles(mascota)">
+        {{ mascota.mostrarDetalles ? '🔽 Ver menos' : '🔼 Más información' }}
+      </button>
+
+      <button (click)="abrirModal(mascota)">✏️ Editar</button>
     </div>
   </div>
 
   <div *ngIf="!cargando && mascotas.length === 0">
-    <p>No hay mascotas disponibles para adopción en este momento.</p>
+    <p>No hay mascotas disponibles.</p>
+  </div>
+</div>
+
+<!-- === MODAL DE EDICIÓN === -->
+<div class="modal-backdrop" *ngIf="mostrarModal">
+  <div class="modal">
+    <h3>Editar Mascota</h3>
+
+    <form *ngIf="mascotaSeleccionada">
+      <div class="form-grid">
+        <label>Nombre</label>
+        <input type="text" [(ngModel)]="mascotaSeleccionada.nombre" name="nombre" />
+
+        <label>Especie</label>
+        <input type="text" [(ngModel)]="mascotaSeleccionada.especie" name="especie" />
+
+        <label>Raza</label>
+        <input type="text" [(ngModel)]="mascotaSeleccionada.raza" name="raza" />
+
+        <label>Edad</label>
+        <input type="number" [(ngModel)]="mascotaSeleccionada.edad" name="edad" />
+
+        <label>Sexo</label>
+        <select [(ngModel)]="mascotaSeleccionada.sexo" name="sexo">
+          <option value="macho">Macho</option>
+          <option value="hembra">Hembra</option>
+        </select>
+
+        <label>Tamaño</label>
+        <select [(ngModel)]="mascotaSeleccionada.tamano" name="tamano">
+          <option value="pequeño">Pequeño</option>
+          <option value="mediano">Mediano</option>
+          <option value="grande">Grande</option>
+        </select>
+
+        <label>Carácter</label>
+        <input type="text" [(ngModel)]="mascotaSeleccionada.caracter" name="caracter" />
+
+        <label>Necesidades especiales</label>
+        <textarea [(ngModel)]="mascotaSeleccionada.necesidadesEspeciales" name="necesidadesEspeciales"></textarea>
+
+        <label>Historia</label>
+        <textarea [(ngModel)]="mascotaSeleccionada.historia" name="historia"></textarea>
+
+        <label>Ubicación</label>
+        <input type="text" [(ngModel)]="mascotaSeleccionada.ubicacion" name="ubicacion" />
+
+        <label>Fecha de ingreso</label>
+        <input type="date" [(ngModel)]="mascotaSeleccionada.fechaIngreso" name="fechaIngreso" />
+
+        <div class="checkbox-group">
+          <label><input type="checkbox" [(ngModel)]="mascotaSeleccionada.esterilizado" name="esterilizado" /> Esterilizado</label>
+          <label><input type="checkbox" [(ngModel)]="mascotaSeleccionada.vacunado" name="vacunado" /> Vacunado</label>
+          <label><input type="checkbox" [(ngModel)]="mascotaSeleccionada.desparasitado" name="desparasitado" /> Desparasitado</label>
+        </div>
+
+        <label>Estado de adopción</label>
+        <select [(ngModel)]="mascotaSeleccionada.estadoAdopcion" name="estadoAdopcion">
+          <option value="adoptable">Adoptable</option>
+          <option value="en_proceso">En proceso</option>
+          <option value="adoptado">Adoptado</option>
+        </select>
+      </div>
+
+      <div class="modal-buttons">
+        <button type="button" (click)="guardarCambios()">💾 Guardar</button>
+        <button type="button" class="cancelar" (click)="cerrarModal()">❌ Cancelar</button>
+      </div>
+    </form>
   </div>
 </div>

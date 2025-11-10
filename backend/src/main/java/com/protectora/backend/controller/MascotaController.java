@@ -63,7 +63,7 @@ public class MascotaController {
                     mascota.setEspecie(mascotaDetails.getEspecie());
                     mascota.setRaza(mascotaDetails.getRaza());
                     mascota.setEdad(mascotaDetails.getEdad());
-                    mascota.setTamaño(mascotaDetails.getTamaño());
+                    mascota.setTamano(mascotaDetails.getTamano());
                     mascota.setSexo(mascotaDetails.getSexo());
                     mascota.setCaracter(mascotaDetails.getCaracter());
                     mascota.setNecesidadesEspeciales(mascotaDetails.getNecesidadesEspeciales());

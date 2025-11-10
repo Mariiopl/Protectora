@@ -46,7 +46,9 @@ public class Mascota {
     private Integer edad;
 
     @Enumerated(EnumType.STRING)
-    private Tamano tamaño;
+    @Column(name = "tamaño") // así se mantiene en la BD con ñ
+    @com.fasterxml.jackson.annotation.JsonProperty("tamano") // así se serializa a JSON sin ñ
+    private Tamano tamano;
 
     @Enumerated(EnumType.STRING)
     private Sexo sexo;

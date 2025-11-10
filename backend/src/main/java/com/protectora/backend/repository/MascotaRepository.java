@@ -9,6 +9,6 @@ import com.protectora.backend.model.Mascota;
 
 @Repository
 public interface MascotaRepository extends JpaRepository<Mascota, Integer> {
-    Optional<Mascota> findByNombre(String nombre);// Define any custom query methods if needed
+    Optional<Mascota> findByNombre(String nombre);
 
 }
