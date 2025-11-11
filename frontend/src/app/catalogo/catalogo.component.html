@@ -1,22 +1,25 @@
 <div class="catalogo-container">
-  <h2>Mascotas</h2>
+  <h2>🐾 Catálogo de Mascotas</h2>
 
-  <div *ngIf="cargando">Cargando mascotas...</div>
+  <div *ngIf="cargando" class="loading">Cargando mascotas...</div>
 
   <div class="grid" *ngIf="!cargando && mascotas.length > 0">
     <div class="card" *ngFor="let mascota of mascotas">
-      <img [src]="mascota.imagenUrl || 'assets/img/default-pet.jpg'" alt="{{ mascota.nombre }}" />
+      <img
+        [src]="mascota.imagenUrl || 'assets/img/default-pet.jpg'"
+        alt="{{ mascota.nombre }}"
+      />
       <h3>{{ mascota.nombre }}</h3>
 
-      <!-- Información básica -->
-      <p><strong>Especie:</strong> {{ mascota.especie }}</p>
-      <p><strong>Raza:</strong> {{ mascota.raza }}</p>
-      <p><strong>Edad:</strong> {{ mascota.edad }} años</p>
-      <p><strong>Sexo:</strong> {{ mascota.sexo }}</p>
-      <p><strong>Tamaño:</strong> {{ mascota.tamano }}</p>
+      <div class="info-basica">
+        <p><strong>Especie:</strong> {{ mascota.especie }}</p>
+        <p><strong>Raza:</strong> {{ mascota.raza }}</p>
+        <p><strong>Edad:</strong> {{ mascota.edad }} años</p>
+        <p><strong>Sexo:</strong> {{ mascota.sexo }}</p>
+        <p><strong>Tamaño:</strong> {{ mascota.tamano }}</p>
+      </div>
 
-      <!-- Mostrar más info si el usuario hace clic -->
-      <div *ngIf="mascota.mostrarDetalles">
+      <div *ngIf="mascota.mostrarDetalles" class="detalles">
         <p><strong>Carácter:</strong> {{ mascota.caracter }}</p>
         <p><strong>Necesidades especiales:</strong> {{ mascota.necesidadesEspeciales || 'Ninguna' }}</p>
         <p><strong>Esterilizado:</strong> {{ mascota.esterilizado ? 'Sí' : 'No' }}</p>
@@ -28,26 +31,34 @@
         <p class="desc"><strong>Historia:</strong> {{ mascota.historia }}</p>
       </div>
 
-      <!-- Botones -->
-      <button (click)="toggleDetalles(mascota)">
-        {{ mascota.mostrarDetalles ? '🔽 Ver menos' : '🔼 Más información' }}
-      </button>
+      <div class="btn-group">
+        <button class="btn info" (click)="toggleDetalles(mascota)">
+          {{ mascota.mostrarDetalles ? 'Ver menos' : 'Ver más' }}
+        </button>
 
-      <button (click)="abrirModal(mascota)">✏️ Editar</button>
+        <button class="btn edit" (click)="abrirModal(mascota)"> Editar
+        </button>
+
+        <button class="btn delete" (click)="eliminarMascota(mascota)"> Eliminar
+        </button>
+      </div>
     </div>
   </div>
 
   <div *ngIf="!cargando && mascotas.length === 0">
-    <p>No hay mascotas disponibles.</p>
+    <p>No hay mascotas disponibles 🐶🐱</p>
   </div>
 </div>
 
 <!-- === MODAL DE EDICIÓN === -->
-<div class="modal-backdrop" *ngIf="mostrarModal">
-  <div class="modal">
-    <h3>Editar Mascota</h3>
+<div class="modal-backdrop" *ngIf="mostrarModal" (click)="cerrarModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Editar Mascota</h3>
+      <button class="close-btn" (click)="cerrarModal()">&times;</button>
+    </div>
 
-    <form *ngIf="mascotaSeleccionada">
+    <form *ngIf="mascotaSeleccionada" class="modal-form">
       <div class="form-grid">
         <label>Nombre</label>
         <input type="text" [(ngModel)]="mascotaSeleccionada.nombre" name="nombre" />
@@ -104,9 +115,14 @@
       </div>
 
       <div class="modal-buttons">
-        <button type="button" (click)="guardarCambios()">💾 Guardar</button>
-        <button type="button" class="cancelar" (click)="cerrarModal()">❌ Cancelar</button>
+        <button type="button" class="btn save" (click)="guardarCambios()">
+          <i class="fa-solid fa-floppy-disk"></i> Guardar
+        </button>
+        <button type="button" class="btn cancel" (click)="cerrarModal()">
+          <i class="fa-solid fa-xmark"></i> Cancelar
+        </button>
       </div>
     </form>
   </div>
 </div>
+

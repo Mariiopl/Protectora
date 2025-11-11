@@ -7,9 +7,9 @@ import { Mascota } from '../interfaces/mascota.model';
 @Component({
   selector: 'app-catalogo',
   standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './catalogo.component.html',
   styleUrls: ['./catalogo.component.css'],
-  imports: [CommonModule, FormsModule],
 })
 export class CatalogoComponent implements OnInit {
   mascotas: Mascota[] = [];
@@ -60,7 +60,17 @@ export class CatalogoComponent implements OnInit {
         });
     }
   }
-  toggleDetalles(mascota: any) {
+
+  eliminarMascota(mascota: Mascota) {
+    if (confirm(`¿Seguro que quieres eliminar a ${mascota.nombre}?`)) {
+      this.mascotaService.eliminarMascota(mascota.idMascota).subscribe({
+        next: () => this.cargarMascotas(),
+        error: (err) => console.error('Error eliminando mascota', err),
+      });
+    }
+  }
+
+  toggleDetalles(mascota: Mascota) {
     mascota.mostrarDetalles = !mascota.mostrarDetalles;
   }
 }

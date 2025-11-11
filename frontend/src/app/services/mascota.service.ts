@@ -7,16 +7,21 @@ import { Mascota } from '../interfaces/mascota.model';
   providedIn: 'root',
 })
 export class MascotaService {
-  private apiUrl = 'http://localhost:8080/api/mascotas'; // 🔗 Ajusta si tu backend usa otro prefijo
+  private apiUrl = 'http://localhost:8080/api/mascotas'; // Ajusta según tu backend
 
   constructor(private http: HttpClient) {}
 
-  // Obtener mascotas adoptables
+  /** 🔹 Obtener todas las mascotas adoptables */
   getAdoptables(): Observable<Mascota[]> {
     return this.http.get<Mascota[]>(this.apiUrl);
   }
 
-  // Actualizar una mascota
+  /** 🔹 Obtener una mascota por ID */
+  getMascotaById(id: number): Observable<Mascota> {
+    return this.http.get<Mascota>(`${this.apiUrl}/${id}`);
+  }
+
+  /** 🔹 Actualizar una mascota existente */
   actualizarMascota(mascota: Mascota): Observable<Mascota> {
     return this.http.put<Mascota>(
       `${this.apiUrl}/${mascota.idMascota}`,
@@ -24,8 +29,8 @@ export class MascotaService {
     );
   }
 
-  // Obtener una mascota por ID
-  getMascotaById(id: number): Observable<Mascota> {
-    return this.http.get<Mascota>(`${this.apiUrl}/${id}`);
+  /** 🔹 Eliminar una mascota por ID */
+  eliminarMascota(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
