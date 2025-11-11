@@ -1,68 +1,72 @@
 <nav class="navbar">
-  <ul class="nav-list">
-    
-    <li *appHasRole="'ADMIN'" routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-      <a routerLink="/usuarios">Usuariosss</a>
-    </li>
+  <div class="nav-container">
+    <div class="logo">🐾 Protectora Animal</div>
 
-    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-      <a routerLink="/adopciones">Adopciones</a>
-    </li>
+    <button class="menu-toggle" (click)="toggleMenu()">☰</button>
 
-    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-      <a routerLink="/catalogo">Catálogo</a>
-    </li>
+    <ul class="nav-list" [class.open]="menuOpen">
 
-    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-      <a routerLink="/compras">Compras</a>
-    </li>
+      <!-- Sección pública -->
+      <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+        <a routerLink="/catalogo">Catálogo</a>
+      </li>
 
-    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-      <a routerLink="/empleados">Empleados</a>
-    </li>
+      <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+        <a routerLink="/adopciones">Adopciones</a>
+      </li>
 
-    <li *appHasRole="'administrador'" routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-      <a routerLink="/perfil">Perfil</a>
-    </li>
+      <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+        <a routerLink="/productos">Productos</a>
+      </li>
 
-    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-      <a routerLink="/productos">Productos</a>
-    </li>
+      <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+        <a routerLink="/compras">Compras</a>
+      </li>
 
-    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-      <a routerLink="/seguimientos">Seguimientos</a>
-    </li>
+      <!-- Desplegable de gestión interna -->
+      <li class="dropdown" *appHasRole="'EMPLEADO'">
+        <a (click)="toggleDropdown('gestion')">Gestión Interna ▾</a>
+        <ul class="dropdown-menu" [class.show]="dropdowns.gestion">
+          <li routerLinkActive="active-item">
+            <a routerLink="/empleados">Empleados</a>
+          </li>
+          <li routerLinkActive="active-item">
+            <a routerLink="/seguimientos">Seguimientos</a>
+          </li>
+          <li routerLinkActive="active-item">
+            <a routerLink="/tareas">Tareas</a>
+          </li>
+          <li routerLinkActive="active-item">
+            <a routerLink="/tratamiento">Tratamientos</a>
+          </li>
+          <li routerLinkActive="active-item">
+            <a routerLink="/turnos">Turnos</a>
+          </li>
+        </ul>
+      </li>
 
-    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-      <a routerLink="/tareas">Tareas</a>
-    </li>
+      <!-- Solo admin -->
+      <li *appHasRole="'ADMIN'" routerLinkActive="active-item">
+        <a routerLink="/usuarios">Usuarios</a>
+      </li>
 
-    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-      <a routerLink="/tratamiento">Tratamiento</a>
-    </li>
+      <!-- Perfil (por ejemplo, administrador o usuario logueado) -->
+      <li *appHasRole="'ADMIN'" routerLinkActive="active-item">
+        <a routerLink="/perfil">Perfil</a>
+      </li>
 
-    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-      <a routerLink="/turnos">Turnos</a>
-    </li>
+      <!-- Usuario logueado -->
+      <li class="user-item" *ngIf="username">
+        <span>👋 Hola, {{ username }}</span>
+      </li>
 
-    <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-      <a routerLink="/usuarios">Usuarios</a>
-    </li>
-
-    <!-- 🔹 Nombre del usuario -->
-    <div *ngIf="username">
-      <p>Saludos, {{ username }}</p>
-    </div>
-
-    <!-- 🔹 Login / Logout -->
-    <li class="logout-item" *ngIf="authService.isAuthenticated()">
-      <a (click)="logout()" class="logout-link">🔓 Cerrar sesión</a>
-    </li>
-
-    <li class="logout-item" *ngIf="!authService.isAuthenticated()">
-      <a routerLink="/login" class="logout-link login-style">🔐 Iniciar sesión</a>
-    </li>
-  </ul>
-
-  
+      <!-- Login / Logout -->
+      <li class="logout-item" *ngIf="authService.isAuthenticated()">
+        <a (click)="logout()" class="logout-link">Cerrar sesión</a>
+      </li>
+      <li class="logout-item" *ngIf="!authService.isAuthenticated()">
+        <a routerLink="/login" class="login-link">Iniciar sesión</a>
+      </li>
+    </ul>
+  </div>
 </nav>

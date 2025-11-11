@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -14,13 +14,25 @@ import { HasRoleDirective } from '../../directives/has-role.directive';
 export class MenuComponent implements OnInit {
   username: string | null = null;
   tipoUsuario: string | null = null;
+  menuOpen = false;
+  dropdowns = { gestion: false };
 
-  constructor(public authService: AuthService, private router: Router) {}
+  constructor(
+    public authService: AuthService,
+    private router: Router,
+    private eRef: ElementRef
+  ) {}
 
   ngOnInit(): void {
     // Al iniciar, cargamos los datos del usuario
     this.username = this.authService.getUsername();
     this.tipoUsuario = this.authService.getTipoUsuario();
+
+    // Detectar navegación para cerrar dropdown automáticamente
+    this.router.events.subscribe(() => {
+      this.closeDropdowns();
+      this.menuOpen = false;
+    });
 
     // Si el estado de login cambia (por ejemplo, tras iniciar o cerrar sesión)
     this.authService.isLoggedIn().subscribe(() => {
@@ -34,5 +46,24 @@ export class MenuComponent implements OnInit {
     this.username = null;
     this.tipoUsuario = null;
     this.router.navigate(['/login']);
+  }
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  toggleDropdown(menu: 'gestion') {
+    this.dropdowns[menu] = !this.dropdowns[menu];
+  }
+
+  closeDropdowns() {
+    this.dropdowns = { gestion: false };
+  }
+
+  /** 🔹 Detectar clic fuera del menú para cerrar el dropdown */
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: Event) {
+    if (!this.eRef.nativeElement.contains(event.target)) {
+      this.closeDropdowns();
+    }
   }
 }

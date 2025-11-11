@@ -14,7 +14,7 @@ import { CompraListComponent } from './inventario/compra-list/compra-list.compon
 import { CompraFormComponent } from './inventario/compra-form/compra-form.component';
 
 export const appRoutes: Routes = [
-  { path: '', redirectTo: '/registro', pathMatch: 'full' },
+  { path: '', redirectTo: '/register', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'catalogo', component: CatalogoComponent, canActivate: [AuthGuard] },
