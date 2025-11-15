@@ -15,6 +15,10 @@ export interface Mascota {
   historia?: string;
   ubicacion?: string;
   fechaIngreso?: string;
-  imagenUrl?: string;
+  fotos: FotoMascota[];
   mostrarDetalles?: boolean;
+}
+export interface FotoMascota {
+  idFoto: number;
+  urlImagen: string;
 }

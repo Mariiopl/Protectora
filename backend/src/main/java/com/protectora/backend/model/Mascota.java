@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "Mascotas")
@@ -80,8 +81,8 @@ public class Mascota {
     @Column(name = "fecha_ingreso")
     private LocalDate fechaIngreso;
 
-    @OneToMany(mappedBy = "mascota")
-    @JsonIgnore
+    @OneToMany(mappedBy = "mascota", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({ "mascota", "hibernateLazyInitializer", "handler" })
     private List<FotoMascota> fotos;
 
     @OneToMany(mappedBy = "mascota")

@@ -5,10 +5,10 @@
 
   <div class="grid" *ngIf="!cargando && mascotas.length > 0">
     <div class="card" *ngFor="let mascota of mascotas">
-      <img
-        [src]="mascota.imagenUrl || 'assets/img/default-pet.jpg'"
-        alt="{{ mascota.nombre }}"
-      />
+<img
+  [src]="mascota.fotos?.length ? 'assets/mascotas/' + mascota.fotos[0].urlImagen : 'assets/mascotas/default.jpg'"
+>
+
       <h3>{{ mascota.nombre }}</h3>
 
       <div class="info-basica">

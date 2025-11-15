@@ -1,5 +1,7 @@
 package com.protectora.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,8 +24,9 @@ public class FotoMascota {
     @Column(name = "id_foto")
     private Integer idFoto;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_mascota")
+    @JsonIgnoreProperties({ "fotos", "hibernateLazyInitializer", "handler" })
     @NotNull(message = "La mascota es obligatoria")
     private Mascota mascota;
 
@@ -31,6 +34,7 @@ public class FotoMascota {
     @Size(max = 255, message = "La URL no puede superar los 255 caracteres")
     @Column(name = "url_imagen")
     private String urlImagen;
+
 }
 // {
 // "mascota": {
