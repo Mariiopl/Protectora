@@ -15,7 +15,8 @@ export class CatalogoComponent implements OnInit {
   mascotas: Mascota[] = [];
   cargando = true;
   mostrarModal = false;
-  mascotaSeleccionada: Mascota | null = null;
+  mascotaSeleccionada: any = null;
+  fotoSeleccionada: File | null = null;
 
   constructor(private mascotaService: MascotaService) {}
 
@@ -42,21 +43,49 @@ export class CatalogoComponent implements OnInit {
     this.mostrarModal = true;
   }
 
+  nuevaMascota() {
+    this.mascotaSeleccionada = {}; // ✅ objeto vacío
+    this.mostrarModal = true;
+  }
+
   cerrarModal() {
     this.mostrarModal = false;
     this.mascotaSeleccionada = null;
+    this.fotoSeleccionada = null;
   }
 
-  guardarCambios() {
-    if (this.mascotaSeleccionada) {
+  guardarMascota() {
+    if (!this.mascotaSeleccionada) return;
+
+    const formData = new FormData();
+    formData.append(
+      'mascota',
+      new Blob([JSON.stringify(this.mascotaSeleccionada)], {
+        type: 'application/json',
+      })
+    );
+
+    if (this.fotoSeleccionada) {
+      formData.append('foto', this.fotoSeleccionada);
+    }
+
+    if (!this.mascotaSeleccionada.idMascota) {
+      this.mascotaService.crearMascotaConFoto(formData).subscribe({
+        next: () => {
+          this.cerrarModal();
+          this.cargarMascotas();
+        },
+        error: (err) => console.error(err),
+      });
+    } else {
       this.mascotaService
-        .actualizarMascota(this.mascotaSeleccionada)
+        .actualizarMascotaConFoto(this.mascotaSeleccionada.idMascota, formData)
         .subscribe({
           next: () => {
             this.cerrarModal();
             this.cargarMascotas();
           },
-          error: (err) => console.error('Error actualizando mascota', err),
+          error: (err) => console.error(err),
         });
     }
   }
@@ -72,5 +101,9 @@ export class CatalogoComponent implements OnInit {
 
   toggleDetalles(mascota: Mascota) {
     mascota.mostrarDetalles = !mascota.mostrarDetalles;
+  }
+  /* === SUBIR FOTO === */
+  subirFoto(event: any) {
+    this.fotoSeleccionada = event.target.files[0];
   }
 }

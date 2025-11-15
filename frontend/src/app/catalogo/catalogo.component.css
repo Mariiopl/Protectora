@@ -250,3 +250,11 @@ h2 {
 .btn.cancel:hover {
   background: #c0392b;
 }
+
+.btn.add {
+  background: #28a745;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}

@@ -1,6 +1,11 @@
 <div class="catalogo-container">
   <h2>🐾 Catálogo de Mascotas</h2>
 
+  <button class="btn add" (click)="nuevaMascota()">
+  + Añadir Mascota
+</button>
+
+
   <div *ngIf="cargando" class="loading">Cargando mascotas...</div>
 
   <div class="grid" *ngIf="!cargando && mascotas.length > 0">
@@ -115,7 +120,7 @@
       </div>
 
       <div class="modal-buttons">
-        <button type="button" class="btn save" (click)="guardarCambios()">
+        <button type="button" class="btn save" (click)="guardarMascota()">
           <i class="fa-solid fa-floppy-disk"></i> Guardar
         </button>
         <button type="button" class="btn cancel" (click)="cerrarModal()">
@@ -125,4 +130,80 @@
     </form>
   </div>
 </div>
+
+<!-- === MODAL DE CREACIÓN === -->
+<div class="modal-backdrop" *ngIf="mostrarModal" (click)="cerrarModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ mascotaSeleccionada?.idMascota ? 'Editar Mascota' : 'Nueva Mascota' }}</h3>
+      <button class="close-btn" (click)="cerrarModal()">&times;</button>
+    </div>
+
+    <form class="modal-form">
+      <div class="form-grid">
+        <label>Nombre</label>
+        <input type="text" [(ngModel)]="mascotaSeleccionada.nombre" name="nombre" />
+
+        <label>Especie</label>
+        <input type="text" [(ngModel)]="mascotaSeleccionada.especie" name="especie" />
+
+        <label>Raza</label>
+        <input type="text" [(ngModel)]="mascotaSeleccionada.raza" name="raza" />
+
+        <label>Edad</label>
+        <input type="number" [(ngModel)]="mascotaSeleccionada.edad" name="edad" />
+
+        <label>Sexo</label>
+        <select [(ngModel)]="mascotaSeleccionada.sexo" name="sexo">
+          <option value="macho">Macho</option>
+          <option value="hembra">Hembra</option>
+        </select>
+
+        <label>Tamaño</label>
+        <select [(ngModel)]="mascotaSeleccionada.tamano" name="tamano">
+          <option value="pequeño">Pequeño</option>
+          <option value="mediano">Mediano</option>
+          <option value="grande">Grande</option>
+        </select>
+
+        <label>Carácter</label>
+        <input type="text" [(ngModel)]="mascotaSeleccionada.caracter" name="caracter" />
+
+        <label>Necesidades especiales</label>
+        <textarea [(ngModel)]="mascotaSeleccionada.necesidadesEspeciales" name="necesidadesEspeciales"></textarea>
+
+        <label>Historia</label>
+        <textarea [(ngModel)]="mascotaSeleccionada.historia" name="historia"></textarea>
+
+        <label>Ubicación</label>
+        <input type="text" [(ngModel)]="mascotaSeleccionada.ubicacion" name="ubicacion" />
+
+        <label>Fecha de ingreso</label>
+        <input type="date" [(ngModel)]="mascotaSeleccionada.fechaIngreso" name="fechaIngreso" />
+
+        <div class="checkbox-group">
+          <label><input type="checkbox" [(ngModel)]="mascotaSeleccionada.esterilizado" name="esterilizado" /> Esterilizado</label>
+          <label><input type="checkbox" [(ngModel)]="mascotaSeleccionada.vacunado" name="vacunado" /> Vacunado</label>
+          <label><input type="checkbox" [(ngModel)]="mascotaSeleccionada.desparasitado" name="desparasitado" /> Desparasitado</label>
+        </div>
+
+        <label>Estado de adopción</label>
+        <select [(ngModel)]="mascotaSeleccionada.estadoAdopcion" name="estadoAdopcion">
+          <option value="adoptable">Adoptable</option>
+          <option value="en_proceso">En proceso</option>
+          <option value="adoptado">Adoptado</option>
+        </select>
+
+        <label>Foto</label>
+        <input type="file" (change)="subirFoto($event)" />
+      </div>
+
+      <div class="modal-buttons">
+        <button type="button" class="btn save" (click)="guardarMascota()">Guardar</button>
+        <button type="button" class="btn cancel" (click)="cerrarModal()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 

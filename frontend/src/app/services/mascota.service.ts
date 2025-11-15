@@ -7,7 +7,7 @@ import { Mascota } from '../interfaces/mascota.model';
   providedIn: 'root',
 })
 export class MascotaService {
-  private apiUrl = 'http://localhost:8080/api/mascotas'; // Ajusta según tu backend
+  private apiUrl = 'http://localhost:8080/api/mascotas';
 
   constructor(private http: HttpClient) {}
 
@@ -32,5 +32,17 @@ export class MascotaService {
   /** 🔹 Eliminar una mascota por ID */
   eliminarMascota(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  /** 🔹 Crear una nueva mascota (opcional con foto) */
+  crearMascotaConFoto(formData: FormData): Observable<Mascota> {
+    return this.http.post<Mascota>(this.apiUrl, formData);
+  }
+
+  actualizarMascotaConFoto(id: number, formData: FormData) {
+    return this.http.put<Mascota>(
+      `http://localhost:8080/api/mascotas/${id}`,
+      formData
+    );
   }
 }

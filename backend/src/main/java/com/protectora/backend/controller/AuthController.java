@@ -3,7 +3,6 @@ package com.protectora.backend.controller;
 import com.protectora.backend.model.Usuario;
 import com.protectora.backend.security.JwtTokenProvider;
 import com.protectora.backend.services.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -16,7 +15,6 @@ public class AuthController {
     private final UsuarioService usuarioService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
     public AuthController(UsuarioService usuarioService, JwtTokenProvider jwtTokenProvider) {
         this.usuarioService = usuarioService;
         this.jwtTokenProvider = jwtTokenProvider;

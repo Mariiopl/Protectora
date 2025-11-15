@@ -4,7 +4,7 @@ export interface Mascota {
   especie: string;
   raza: string;
   edad: number;
-  tamano: 'Pequeño' | 'Mediano' | 'Grande';
+  tamano: 'pequeño' | 'mediano' | 'grande';
   sexo: 'macho' | 'hembra';
   caracter: string;
   necesidadesEspeciales?: string;

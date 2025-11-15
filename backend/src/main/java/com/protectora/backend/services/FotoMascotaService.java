@@ -1,34 +1,41 @@
 package com.protectora.backend.services;
 
-import com.protectora.backend.model.FotoMascota;
-import com.protectora.backend.repository.FotoMascotaRepository;
-import org.springframework.stereotype.Service;
+import java.io.File;
+import java.io.IOException;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.protectora.backend.model.FotoMascota;
+import com.protectora.backend.model.Mascota;
+import com.protectora.backend.repository.FotoMascotaRepository;
 
 @Service
 public class FotoMascotaService {
 
     private final FotoMascotaRepository fotoMascotaRepository;
+    private final String uploadDir = "I:/Protectora/frontend/src/assets/mascotas/";
 
     public FotoMascotaService(FotoMascotaRepository fotoMascotaRepository) {
         this.fotoMascotaRepository = fotoMascotaRepository;
+        new File(uploadDir).mkdirs();
     }
 
-    public List<FotoMascota> findAll() {
-        return fotoMascotaRepository.findAll();
-    }
+    public FotoMascota guardarFoto(Mascota mascota, MultipartFile archivo) {
+        try {
+            String nombreArchivo = System.currentTimeMillis() + "_" + archivo.getOriginalFilename();
+            File destino = new File(uploadDir + nombreArchivo);
+            archivo.transferTo(destino);
 
-    public Optional<FotoMascota> findById(Integer id) {
-        return fotoMascotaRepository.findById(id);
-    }
+            FotoMascota foto = FotoMascota.builder()
+                    .mascota(mascota)
+                    .urlImagen(nombreArchivo)
+                    .build();
 
-    public FotoMascota save(FotoMascota fotoMascota) {
-        return fotoMascotaRepository.save(fotoMascota);
-    }
+            return fotoMascotaRepository.save(foto);
 
-    public void deleteById(Integer id) {
-        fotoMascotaRepository.deleteById(id);
+        } catch (IOException e) {
+            throw new RuntimeException("Error al guardar la foto", e);
+        }
     }
 }
