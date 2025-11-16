@@ -109,8 +109,9 @@
         <label>Ubicación</label>
         <input type="text" [(ngModel)]="mascotaSeleccionada.ubicacion" name="ubicacion"/>
 
-        <label>Fecha de ingreso</label>
-        <input type="date" [(ngModel)]="mascotaSeleccionada.fechaIngreso" name="fechaIngreso"/>
+        <!-- Solo mostrar al editar -->
+        <label *ngIf="mascotaSeleccionada?.idMascota">Fecha de ingreso</label>
+        <input *ngIf="mascotaSeleccionada?.idMascota" type="date" [(ngModel)]="mascotaSeleccionada.fechaIngreso" name="fechaIngreso"/>
 
         <div class="checkbox-group">
           <label><input type="checkbox" [(ngModel)]="mascotaSeleccionada.esterilizado" name="esterilizado"/> Esterilizado</label>
@@ -118,8 +119,9 @@
           <label><input type="checkbox" [(ngModel)]="mascotaSeleccionada.desparasitado" name="desparasitado"/> Desparasitado</label>
         </div>
 
-        <label>Estado de adopción</label>
-        <select [(ngModel)]="mascotaSeleccionada.estadoAdopcion" name="estadoAdopcion">
+        <!-- Solo mostrar al editar -->
+        <label *ngIf="mascotaSeleccionada?.idMascota">Estado de adopción</label>
+        <select *ngIf="mascotaSeleccionada?.idMascota" [(ngModel)]="mascotaSeleccionada.estadoAdopcion" name="estadoAdopcion">
           <option value="adoptable">Adoptable</option>
           <option value="en proceso">En proceso</option>
           <option value="adoptado">Adoptado</option>
@@ -139,3 +141,4 @@
 
   </div>
 </div>
+
