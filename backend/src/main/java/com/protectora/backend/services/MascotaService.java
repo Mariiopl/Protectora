@@ -1,44 +1,93 @@
 package com.protectora.backend.services;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
+import com.protectora.backend.dto.MascotaDto;
 import com.protectora.backend.model.Mascota;
 import com.protectora.backend.repository.MascotaRepository;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class MascotaService {
 
     private final MascotaRepository mascotaRepository;
+    private final String uploadDir = "I:/Protectora/frontend/src/assets/mascotas/";
 
     public MascotaService(MascotaRepository mascotaRepository) {
         this.mascotaRepository = mascotaRepository;
+        new File(uploadDir).mkdirs();
     }
 
-    // Obtener todas las mascotas
-    public List<Mascota> findAll() {
+    public List<Mascota> getAll() {
         return mascotaRepository.findAll();
     }
 
-    // Buscar mascota por ID
-    public Optional<Mascota> findById(Integer id) {
-        return mascotaRepository.findById(id);
+    public Mascota getById(Integer id) {
+        return mascotaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
     }
 
-    // Guardar o actualizar mascota
-    public Mascota save(Mascota mascota) {
-        return mascotaRepository.save(mascota);
+    public String create(MascotaDto dto, MultipartFile foto) {
+        Mascota mascota = dto.toEntity();
+        mascota.setFechaIngreso(LocalDate.now());
+        mascota.setEstadoAdopcion(Mascota.EstadoAdopcion.adoptable);
+        mascota = mascotaRepository.save(mascota);
+
+        if (foto != null && !foto.isEmpty()) {
+            String fileName = guardarImagen(foto);
+            mascota.setFoto(fileName);
+            mascotaRepository.save(mascota);
+        }
+
+        return "Mascota creada correctamente";
     }
 
-    // Eliminar mascota por ID
-    public void deleteById(Integer id) {
-        mascotaRepository.deleteById(id);
+    public String update(Integer id, MascotaDto dto, MultipartFile foto) {
+        Mascota mascota = getById(id);
+        dto.updateEntity(mascota);
+
+        if (foto != null && !foto.isEmpty()) {
+            String fileName = guardarImagen(foto);
+            mascota.setFoto(fileName);
+        }
+
+        mascotaRepository.save(mascota);
+        return "Mascota actualizada correctamente";
     }
 
-    // Buscar mascotas por nombre
-    public Optional<Mascota> findByNombre(String nombre) {
-        return mascotaRepository.findByNombre(nombre);
+    public String delete(Integer id) {
+        Mascota mascota = getById(id);
+        mascotaRepository.delete(mascota);
+        return "Mascota eliminada correctamente";
+    }
+
+    public Resource getImage(String filename) throws IOException {
+        Path file = Paths.get(uploadDir).resolve(filename);
+        if (!Files.exists(file)) {
+            throw new RuntimeException("La imagen no existe");
+        }
+        return new UrlResource(file.toUri());
+    }
+
+    private String guardarImagen(MultipartFile foto) {
+        try {
+            String nombreArchivo = System.currentTimeMillis() + "_" + foto.getOriginalFilename();
+            File destino = new File(uploadDir + nombreArchivo);
+            foto.transferTo(destino);
+            return nombreArchivo;
+        } catch (IOException e) {
+            throw new RuntimeException("Error al guardar la imagen", e);
+        }
     }
 }
