@@ -40,11 +40,11 @@
           {{ mascota.mostrarDetalles ? 'Ver menos' : 'Ver más' }}
         </button>
 
-        <button class="btn edit" (click)="abrirModal(mascota)">
+        <button class="btn edit" (click)="abrirModal(mascota)"*appHasRole="'administrador'">
           Editar
         </button>
 
-        <button class="btn delete" (click)="eliminarMascota(mascota)">
+        <button class="btn delete" (click)="eliminarMascota(mascota)"*appHasRole="'administrador'">
           Eliminar
         </button>
       </div>

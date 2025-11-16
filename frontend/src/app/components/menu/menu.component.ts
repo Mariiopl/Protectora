@@ -3,6 +3,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { HasRoleDirective } from '../../directives/has-role.directive';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-menu',
@@ -42,11 +43,31 @@ export class MenuComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout();
-    this.username = null;
-    this.tipoUsuario = null;
-    this.router.navigate(['/login']);
+    Swal.fire({
+      title: '¿Cerrar sesión?',
+      text: 'Se cerrará tu sesión actual',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, salir',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.authService.logout();
+        this.username = null;
+        this.tipoUsuario = null;
+        this.router.navigate(['/login']);
+
+        Swal.fire(
+          'Sesión cerrada',
+          'Has cerrado sesión correctamente.',
+          'success'
+        );
+      }
+    });
   }
+
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }

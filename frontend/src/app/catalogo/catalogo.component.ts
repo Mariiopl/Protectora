@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MascotaService } from '../services/mascota.service';
 import { Mascota } from '../interfaces/mascota.model';
+import { HasRoleDirective } from '../directives/has-role.directive';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-catalogo',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HasRoleDirective],
   templateUrl: './catalogo.component.html',
   styleUrls: ['./catalogo.component.css'],
 })
@@ -91,12 +93,33 @@ export class CatalogoComponent implements OnInit {
   }
 
   eliminarMascota(mascota: Mascota) {
-    if (confirm(`¿Seguro que quieres eliminar a ${mascota.nombre}?`)) {
-      this.mascotaService.eliminarMascota(mascota.idMascota).subscribe({
-        next: () => this.cargarMascotas(),
-        error: (err) => console.error('Error eliminando mascota', err),
-      });
-    }
+    Swal.fire({
+      title: `¿Eliminar a ${mascota.nombre}?`,
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.mascotaService.eliminarMascota(mascota.idMascota).subscribe({
+          next: () => {
+            this.cargarMascotas();
+            Swal.fire(
+              '¡Eliminado!',
+              `${mascota.nombre} ha sido eliminado.`,
+              'success'
+            );
+          },
+          error: (err) => {
+            console.error('Error eliminando mascota', err);
+            Swal.fire('Error', 'No se pudo eliminar la mascota.', 'error');
+          },
+        });
+      }
+    });
   }
 
   toggleDetalles(mascota: Mascota) {

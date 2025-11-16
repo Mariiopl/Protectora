@@ -24,7 +24,7 @@
       </li>
 
       <!-- Desplegable de gestión interna -->
-      <li class="dropdown" *appHasRole="'EMPLEADO'">
+      <li class="dropdown" *appHasRole="['administrador','empleado']">
         <a (click)="toggleDropdown('gestion')">Gestión Interna ▾</a>
         <ul class="dropdown-menu" [class.show]="dropdowns.gestion">
           <li routerLinkActive="active-item">
@@ -46,7 +46,7 @@
       </li>
 
       <!-- Solo admin -->
-      <li *appHasRole="'ADMIN'" routerLinkActive="active-item">
+      <li *appHasRole="'administrador'" routerLinkActive="active-item">
         <a routerLink="/usuarios">Usuarios</a>
       </li>
 

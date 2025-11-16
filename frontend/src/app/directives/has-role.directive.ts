@@ -43,10 +43,10 @@ export class HasRoleDirective implements OnInit, OnDestroy {
   }
 
   private updateView() {
-    this.viewContainer.clear(); // Limpia contenido previo
-    const tienePermiso = this.rolesPermitidos.some((role) =>
-      this.authService.getTipoUsuario()
-    );
+    this.viewContainer.clear();
+    const usuarioRol = this.authService.getTipoUsuario();
+
+    const tienePermiso = this.rolesPermitidos.includes(usuarioRol || '');
     if (tienePermiso) {
       this.viewContainer.createEmbeddedView(this.templateRef);
     }
