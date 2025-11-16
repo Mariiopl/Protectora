@@ -12,6 +12,7 @@ import { TurnosComponent } from './turnos/turnos.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { CompraListComponent } from './inventario/compra-list/compra-list.component';
 import { CompraFormComponent } from './inventario/compra-form/compra-form.component';
+import { MascotasAdoptablesComponent } from './mascotas-adoptables/mascotas-adoptables.component';
 
 export const appRoutes: Routes = [
   { path: '', redirectTo: '/register', pathMatch: 'full' },
@@ -21,6 +22,11 @@ export const appRoutes: Routes = [
   {
     path: 'adopciones',
     component: AdopcionesComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'mascotas/adoptadas',
+    component: MascotasAdoptablesComponent,
     canActivate: [AuthGuard],
   },
   {

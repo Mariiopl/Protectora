@@ -45,4 +45,8 @@ export class MascotaService {
       formData
     );
   }
+
+  getAdoptadas(): Observable<Mascota[]> {
+    return this.http.get<Mascota[]>(`${this.apiUrl}/adoptables`);
+  }
 }

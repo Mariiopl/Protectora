@@ -95,4 +95,14 @@ public class MascotaController {
         }
     }
 
+    @GetMapping("/adoptables")
+    public ResponseEntity<?> getAdoptable() {
+        try {
+            List<Mascota> adoptadas = mascotaService.getAdoptable();
+            return ResponseEntity.ok(adoptadas);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
+        }
+    }
+
 }

@@ -90,4 +90,9 @@ public class MascotaService {
             throw new RuntimeException("Error al guardar la imagen", e);
         }
     }
+
+    public List<Mascota> getAdoptable() {
+        return mascotaRepository.findByEstadoAdopcion(Mascota.EstadoAdopcion.adoptable);
+    }
+
 }
