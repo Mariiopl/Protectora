@@ -81,9 +81,9 @@ public class Mascota {
     @Column(name = "fecha_ingreso")
     private LocalDate fechaIngreso;
 
-    @OneToMany(mappedBy = "mascota", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Column(name = "foto")
     @JsonIgnoreProperties({ "mascota", "hibernateLazyInitializer", "handler" })
-    private List<FotoMascota> fotos;
+    private String foto;
 
     @OneToMany(mappedBy = "mascota")
     @JsonIgnore

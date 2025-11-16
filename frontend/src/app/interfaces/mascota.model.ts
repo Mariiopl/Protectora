@@ -11,14 +11,10 @@ export interface Mascota {
   esterilizado?: boolean;
   vacunado?: boolean;
   desparasitado?: boolean;
-  estadoAdopcion?: 'adoptable' | 'en_proceso' | 'adoptado';
+  estadoAdopcion?: 'adoptable' | 'en proceso' | 'adoptado';
   historia?: string;
   ubicacion?: string;
   fechaIngreso?: string;
-  fotos: FotoMascota[];
+  foto?: string;
   mostrarDetalles?: boolean;
-}
-export interface FotoMascota {
-  idFoto: number;
-  urlImagen: string;
 }
