@@ -35,17 +35,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String token = this.extractToken(request);
 
-        if (this.tokenProvider.isValidToken(token)) {
-
-            String username = this.tokenProvider.getUsernameFromToken(token);
-            UserDetails user = this.userService.loadUserByUsername(username);
-
-            Authentication auth = new UsernamePasswordAuthenticationToken(
-                    user,
-                    null,
-                    user.getAuthorities());
-
-            SecurityContextHolder.getContext().setAuthentication(auth);
+        if (token != null && this.tokenProvider.isValidToken(token)) {
+            // Solo marcamos que el request tiene un token válido
+            // No necesitamos cargar UserDetails aquí
+            // Si quieres, puedes poner el idUsuario en un atributo de la request:
+            Integer idUsuario = tokenProvider.getUserIdFromToken(token);
+            request.setAttribute("idUsuario", idUsuario);
         }
 
         filterChain.doFilter(request, response);
@@ -53,7 +48,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private String extractToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasLength(bearerToken) && bearerToken.startsWith("Bearer")) {
+        if (StringUtils.hasLength(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring("Bearer ".length());
         }
         return null;

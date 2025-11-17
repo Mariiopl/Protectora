@@ -1,55 +1,97 @@
 package com.protectora.backend.services;
 
-import com.protectora.backend.dto.AdopcionDTO;
+import com.protectora.backend.dto.AdopcionDto;
 import com.protectora.backend.model.Adopcion;
+import com.protectora.backend.model.Mascota;
+import com.protectora.backend.model.Usuario;
 import com.protectora.backend.repository.AdopcionRepository;
+import com.protectora.backend.repository.MascotaRepository;
+import com.protectora.backend.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class AdopcionService {
 
     private final AdopcionRepository adopcionRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final MascotaRepository mascotaRepository;
 
-    public AdopcionService(AdopcionRepository adopcionRepository) {
+    public AdopcionService(AdopcionRepository adopcionRepository,
+            UsuarioRepository usuarioRepository,
+            MascotaRepository mascotaRepository) {
         this.adopcionRepository = adopcionRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.mascotaRepository = mascotaRepository;
     }
 
-    public List<AdopcionDTO> findAllDTO() {
-        return adopcionRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
+    // ======================
+    // CONSULTAS
+    // ======================
+    public List<AdopcionDto> findAllDTO() {
+        return adopcionRepository.findAll()
+                .stream()
+                .map(AdopcionDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
-    private AdopcionDTO toDTO(Adopcion adopcion) {
-        AdopcionDTO dto = new AdopcionDTO();
-        dto.setIdAdopcion(adopcion.getIdAdopcion());
-        dto.setEstado(adopcion.getEstado().name());
-        dto.setFechaSolicitud(adopcion.getFechaSolicitud());
-        dto.setFechaAdopcion(adopcion.getFechaAdopcion());
-        dto.setExperiencia(adopcion.getExperiencia());
-        dto.setTipoVivienda(adopcion.getTipoVivienda());
-        dto.setComentarios(adopcion.getComentarios());
-
-        dto.setIdUsuario(adopcion.getUsuario().getIdUsuario());
-        dto.setNombreUsuario(adopcion.getUsuario().getNombre());
-
-        dto.setIdMascota(adopcion.getMascota().getIdMascota());
-        dto.setNombreMascota(adopcion.getMascota().getNombre());
-
-        return dto;
+    public List<AdopcionDto> findByUsuarioDTO(Integer idUsuario) {
+        return adopcionRepository.findByUsuario_IdUsuario(idUsuario)
+                .stream()
+                .map(AdopcionDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Adopcion> findById(Integer id) {
-        return adopcionRepository.findById(id);
+    public Adopcion getById(Integer id) {
+        return adopcionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Adopción no encontrada"));
     }
 
-    public Adopcion save(Adopcion adopcion) {
+    // ======================
+    // CREACIÓN / ACTUALIZACIÓN
+    // ======================
+    public Adopcion create(Integer idUsuario, Integer idMascota, AdopcionDto dto) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Mascota mascota = mascotaRepository.findById(idMascota)
+                .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
+
+        Adopcion adopcion = new Adopcion();
+        adopcion.setUsuario(usuario);
+        adopcion.setMascota(mascota);
+        adopcion.setEstado(dto.getEstado() != null ? dto.getEstado() : Adopcion.Estado.pendiente);
+        adopcion.setFechaSolicitud(LocalDate.now());
+        adopcion.setFechaAdopcion(dto.getFechaAdopcion());
+        adopcion.setExperiencia(dto.getExperiencia());
+        adopcion.setTipoVivienda(dto.getTipoVivienda());
+        adopcion.setComentarios(dto.getComentarios());
+
         return adopcionRepository.save(adopcion);
     }
 
-    public void deleteById(Integer id) {
-        adopcionRepository.deleteById(id);
+    public Adopcion update(Integer idAdopcion, AdopcionDto dto) {
+        Adopcion adopcion = getById(idAdopcion);
+
+        if (dto.getEstado() != null)
+            adopcion.setEstado(dto.getEstado());
+        if (dto.getFechaAdopcion() != null)
+            adopcion.setFechaAdopcion(dto.getFechaAdopcion());
+        if (dto.getExperiencia() != null)
+            adopcion.setExperiencia(dto.getExperiencia());
+        if (dto.getTipoVivienda() != null)
+            adopcion.setTipoVivienda(dto.getTipoVivienda());
+        if (dto.getComentarios() != null)
+            adopcion.setComentarios(dto.getComentarios());
+
+        return adopcionRepository.save(adopcion);
     }
+
+    public void delete(Integer idAdopcion) {
+        Adopcion adopcion = getById(idAdopcion);
+        adopcionRepository.delete(adopcion);
+    }
+
 }

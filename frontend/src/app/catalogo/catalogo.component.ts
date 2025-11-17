@@ -28,7 +28,7 @@ export class CatalogoComponent implements OnInit {
 
   cargarMascotas() {
     this.cargando = true;
-    this.mascotaService.getAdoptables().subscribe({
+    this.mascotaService.getAdoptadas().subscribe({
       next: (data) => {
         this.mascotas = data;
         this.cargando = false;

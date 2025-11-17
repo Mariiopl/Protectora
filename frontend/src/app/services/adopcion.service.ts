@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Adopcion } from '../interfaces/adopcion.model';
+import { AuthService } from './auth.service'; // importa tu servicio de autenticación
 
 @Injectable({
   providedIn: 'root',
@@ -9,28 +9,17 @@ import { Adopcion } from '../interfaces/adopcion.model';
 export class AdopcionService {
   private apiUrl = 'http://localhost:8080/api/adopciones';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getAll(): Observable<Adopcion[]> {
-    return this.http.get<Adopcion[]>(this.apiUrl);
-  }
+  getMisAdopciones(): Observable<any> {
+    const token = this.authService.getToken(); // JWT guardado en localStorage o donde lo tengas
+    if (!token)
+      throw new Error(
+        'Usuario no autenticado o idUsuario no encontrado en el token'
+      );
 
-  getById(id: number): Observable<Adopcion> {
-    return this.http.get<Adopcion>(`${this.apiUrl}/${id}`);
-  }
-
-  create(adopcion: Adopcion): Observable<Adopcion> {
-    return this.http.post<Adopcion>(this.apiUrl, adopcion);
-  }
-
-  update(adopcion: Adopcion): Observable<Adopcion> {
-    return this.http.put<Adopcion>(
-      `${this.apiUrl}/${adopcion.idAdopcion}`,
-      adopcion
-    );
-  }
-
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.get(`${this.apiUrl}/mis-adopciones`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   }
 }

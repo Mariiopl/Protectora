@@ -15,14 +15,41 @@ h2 {
   color: #555;
 }
 
+/* ---------------------------------------------------
+   MASONRY DE 5 COLUMNAS – NO COLAPSAN LAS TARJETAS
+--------------------------------------------------- */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
-  align-items: start;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 25px;
 }
 
+
+/* Forzar 5 columnas en pantallas grandes */
+@media (max-width: 1600px) { .grid { column-count: 5; } }
+
+/* Breakpoints normales */
+@media (max-width: 1400px) { 
+  .grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 1100px) { 
+  .grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 800px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 500px) { 
+  .grid { grid-template-columns: repeat(1, 1fr); }
+}
+
+
 .card {
+  width: 100%;
+  max-width: 240px; /* ← clave */
+  margin-bottom: 25px; 
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 15px;
@@ -30,6 +57,7 @@ h2 {
   transition: all 0.3s ease;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
 }
+
 
 .card:hover {
   transform: translateY(-5px);
@@ -109,7 +137,8 @@ h2 {
   background: #c0392b;
 }
 
-/* Modal */
+/* --- Modal (igual que antes) --- */
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -139,7 +168,7 @@ h2 {
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
   transform: translateY(-30px);
   animation: slideIn 0.3s ease forwards;
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 @keyframes slideIn {

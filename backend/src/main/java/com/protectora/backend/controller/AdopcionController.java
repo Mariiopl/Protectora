@@ -1,9 +1,11 @@
 package com.protectora.backend.controller;
 
-import com.protectora.backend.dto.AdopcionDTO;
+import com.protectora.backend.dto.AdopcionDto;
 import com.protectora.backend.model.Adopcion;
+import com.protectora.backend.model.Usuario;
+import com.protectora.backend.security.JwtTokenProvider;
 import com.protectora.backend.services.AdopcionService;
-import jakarta.validation.Valid;
+import com.protectora.backend.services.UsuarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,56 +17,102 @@ import java.util.List;
 public class AdopcionController {
 
     private final AdopcionService adopcionService;
+    private final UsuarioService usuarioService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public AdopcionController(AdopcionService adopcionService) {
+    public AdopcionController(AdopcionService adopcionService,
+            UsuarioService usuarioService,
+            JwtTokenProvider jwtTokenProvider) {
         this.adopcionService = adopcionService;
+        this.usuarioService = usuarioService;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    // =================================================
+    // OBTENER ADOPCIONES
+    // =================================================
     @GetMapping
-    public List<AdopcionDTO> getAll() {
-        return adopcionService.findAllDTO();
+    public ResponseEntity<List<AdopcionDto>> getAll() {
+        List<AdopcionDto> adopciones = adopcionService.findAllDTO();
+        return ResponseEntity.ok(adopciones);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Adopcion> getAdopcionById(@PathVariable Integer id) {
-        return adopcionService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<AdopcionDto> getById(@PathVariable Integer id) {
+        try {
+            Adopcion adopcion = adopcionService.getById(id);
+            return ResponseEntity.ok(AdopcionDto.fromEntity(adopcion));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @PostMapping
-    public ResponseEntity<Adopcion> createAdopcion(@Valid @RequestBody Adopcion adopcion) {
-        Adopcion saved = adopcionService.save(adopcion);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Adopcion> updateAdopcion(
-            @PathVariable Integer id,
-            @Valid @RequestBody Adopcion adopcionDetails) {
-
-        return adopcionService.findById(id)
-                .map(adopcion -> {
-                    adopcion.setUsuario(adopcionDetails.getUsuario());
-                    adopcion.setMascota(adopcionDetails.getMascota());
-                    adopcion.setEstado(adopcionDetails.getEstado());
-                    adopcion.setFechaSolicitud(adopcionDetails.getFechaSolicitud());
-                    adopcion.setFechaAdopcion(adopcionDetails.getFechaAdopcion());
-                    adopcion.setExperiencia(adopcionDetails.getExperiencia());
-                    adopcion.setTipoVivienda(adopcionDetails.getTipoVivienda());
-                    adopcion.setComentarios(adopcionDetails.getComentarios());
-                    Adopcion updated = adopcionService.save(adopcion);
-                    return ResponseEntity.ok(updated);
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAdopcion(@PathVariable Integer id) {
-        if (adopcionService.findById(id).isPresent()) {
-            adopcionService.deleteById(id);
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<List<AdopcionDto>> getByUsuario(@PathVariable Integer idUsuario) {
+        List<AdopcionDto> adopciones = adopcionService.findByUsuarioDTO(idUsuario);
+        if (adopciones.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(adopciones);
+    }
+
+    @GetMapping("/mis-adopciones")
+    public ResponseEntity<List<AdopcionDto>> getMisAdopciones(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String token = authHeader.substring(7);
+        Integer idUsuario = jwtTokenProvider.getUserIdFromToken(token);
+
+        Usuario usuario = usuarioService.findById(idUsuario).orElse(null);
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        List<AdopcionDto> adopciones = adopcionService.findByUsuarioDTO(usuario.getIdUsuario());
+        if (adopciones.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(adopciones);
+    }
+
+    // =================================================
+    // CREAR ADOPCION
+    // =================================================
+    @PostMapping
+    public ResponseEntity<AdopcionDto> create(@RequestBody AdopcionDto dto) {
+        try {
+            Adopcion guardada = adopcionService.create(dto.getIdUsuario(), dto.getIdMascota(), dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(AdopcionDto.fromEntity(guardada));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // =================================================
+    // ACTUALIZAR ADOPCION
+    // =================================================
+    @PutMapping("/{id}")
+    public ResponseEntity<AdopcionDto> update(@PathVariable Integer id, @RequestBody AdopcionDto dto) {
+        try {
+            Adopcion updated = adopcionService.update(id, dto);
+            return ResponseEntity.ok(AdopcionDto.fromEntity(updated));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // =================================================
+    // ELIMINAR ADOPCION
+    // =================================================
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        try {
+            adopcionService.delete(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

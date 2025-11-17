@@ -23,7 +23,7 @@ export class MascotasAdoptablesComponent implements OnInit {
 
   cargarAdoptadas() {
     this.cargando = true;
-    this.mascotaService.getAdoptadas().subscribe({
+    this.mascotaService.getAdoptables().subscribe({
       next: (data) => {
         this.mascotas = data;
         this.cargando = false;

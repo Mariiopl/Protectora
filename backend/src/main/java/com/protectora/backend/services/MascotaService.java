@@ -95,4 +95,8 @@ public class MascotaService {
         return mascotaRepository.findByEstadoAdopcion(Mascota.EstadoAdopcion.adoptable);
     }
 
+    public List<Mascota> getAdoptado() {
+        return mascotaRepository.findByEstadoAdopcion(Mascota.EstadoAdopcion.adoptado);
+    }
+
 }

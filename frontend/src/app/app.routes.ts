@@ -13,6 +13,7 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
 import { CompraListComponent } from './inventario/compra-list/compra-list.component';
 import { CompraFormComponent } from './inventario/compra-form/compra-form.component';
 import { MascotasAdoptablesComponent } from './mascotas-adoptables/mascotas-adoptables.component';
+import { DonacionesComponent } from './donaciones/donaciones.component';
 
 export const appRoutes: Routes = [
   { path: '', redirectTo: '/register', pathMatch: 'full' },
@@ -25,7 +26,7 @@ export const appRoutes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'mascotas/adoptadas',
+    path: 'mascotas/en-adopcion',
     component: MascotasAdoptablesComponent,
     canActivate: [AuthGuard],
   },
@@ -34,12 +35,17 @@ export const appRoutes: Routes = [
     component: EmpleadosComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'donacion',
+    component: DonacionesComponent,
+    canActivate: [AuthGuard],
+  },
   { path: 'perfil', component: PerfilComponent, canActivate: [AuthGuard] },
   { path: 'tareas', component: TareasComponent, canActivate: [AuthGuard] },
   { path: 'turnos', component: TurnosComponent, canActivate: [AuthGuard] },
   { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
   {
-    path: 'tratamiento',
+    path: 'tratamientos',
     component: TratamientoComponent,
     canActivate: [AuthGuard],
   },

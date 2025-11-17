@@ -18,18 +18,13 @@ export class AdopcionesComponent implements OnInit {
   constructor(private adopcionService: AdopcionService) {}
 
   ngOnInit(): void {
-    this.cargarAdopciones();
-  }
-
-  cargarAdopciones() {
-    this.cargando = true;
-    this.adopcionService.getAll().subscribe({
-      next: (data) => {
-        this.adopciones = data;
+    this.adopcionService.getMisAdopciones().subscribe({
+      next: (res: any) => {
+        this.adopciones = res;
         this.cargando = false;
       },
       error: (err) => {
-        console.error('Error cargando adopciones', err);
+        console.error(err);
         this.cargando = false;
       },
     });

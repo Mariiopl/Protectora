@@ -46,7 +46,10 @@ export class MascotaService {
     );
   }
 
-  getAdoptadas(): Observable<Mascota[]> {
+  getAdoptable(): Observable<Mascota[]> {
     return this.http.get<Mascota[]>(`${this.apiUrl}/adoptables`);
+  }
+  getAdoptadas(): Observable<Mascota[]> {
+    return this.http.get<Mascota[]>(`${this.apiUrl}/adoptadas`);
   }
 }

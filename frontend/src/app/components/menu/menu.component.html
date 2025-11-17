@@ -8,28 +8,34 @@
 
       <!-- Sección pública -->
       <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-        <a routerLink="/catalogo">En adopción</a>
+        <a routerLink="/catalogo">Adoptados</a>
       </li>
 
       <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-        <a routerLink="/mascotas/adoptadas">Adopciones</a>
+        <a routerLink="/mascotas/en-adopcion"> En adopción</a>
+      </li>
+     <!-- Sección voluntario -->
+      <li *appHasRole="'voluntario'" routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+        <a routerLink="/donacion"> Donaciones </a>
+      </li>
+     <!-- Sección Adoptante -->
+      <li *appHasRole="'adoptante'" routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+        <a routerLink="/tratamientos">Tratamientos</a>        
+      </li>
+      <li *appHasRole="'adoptante'" routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+        <a routerLink="/adopciones">Mascotas Adoptadas</a>        
       </li>
 
-      <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-        <a routerLink="/productos">Productos</a>
-        
-      </li>
-
-      <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-        <a routerLink="/compras">Compras</a>
-      </li>
 
       <!-- Desplegable de gestión interna -->
       <li class="dropdown" *appHasRole="['administrador','empleado']">
         <a (click)="toggleDropdown('gestion')">Gestión Interna ▾</a>
         <ul class="dropdown-menu" [class.show]="dropdowns.gestion">
-          <li routerLinkActive="active-item">
+          <li *appHasRole="'administrador'" routerLinkActive="active-item">
             <a routerLink="/empleados">Empleados</a>
+          </li>
+          <li *appHasRole="'administrador'" routerLinkActive="active-item">
+            <a routerLink="/usuarios">Usuarios</a>
           </li>
           <li routerLinkActive="active-item">
             <a routerLink="/seguimientos">Seguimientos</a>

@@ -98,7 +98,17 @@ public class MascotaController {
     @GetMapping("/adoptables")
     public ResponseEntity<?> getAdoptable() {
         try {
-            List<Mascota> adoptadas = mascotaService.getAdoptable();
+            List<Mascota> adoptable = mascotaService.getAdoptable();
+            return ResponseEntity.ok(adoptable);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
+        }
+    }
+
+    @GetMapping("/adoptadas")
+    public ResponseEntity<?> getAdoptado() {
+        try {
+            List<Mascota> adoptadas = mascotaService.getAdoptado();
             return ResponseEntity.ok(adoptadas);
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));

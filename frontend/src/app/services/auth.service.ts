@@ -81,6 +81,11 @@ export class AuthService {
     );
   }
 
+  getUserId(): number | null {
+    const decoded: any = this.decodeToken();
+    return decoded?.id_usuario ?? null;
+  }
+
   // === GUARDAR DATOS DESPUÉS DEL LOGIN ===
   saveAuthData(token: string, username: string, roles: string[]): void {
     localStorage.setItem('token', token);

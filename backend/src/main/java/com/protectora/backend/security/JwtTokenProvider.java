@@ -65,12 +65,12 @@ public class JwtTokenProvider {
 
     }
 
-    public String getUsernameFromToken(String token) {
+    public Integer getUserIdFromToken(String token) {
         JwtParser parser = Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
                 .build();
-
         Claims claims = parser.parseClaimsJws(token).getBody();
-        return claims.get("username").toString();
+        return Integer.parseInt(claims.getSubject()); // el "sub" es tu idUsuario
     }
+
 }
