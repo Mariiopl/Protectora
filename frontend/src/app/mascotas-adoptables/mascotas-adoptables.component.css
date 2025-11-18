@@ -1,3 +1,4 @@
+/* ====================== Catalogo de Mascotas ====================== */
 .catalogo-container {
   padding: 20px;
   font-family: 'Segoe UI', sans-serif;
@@ -109,57 +110,56 @@ h2 {
   background: #c0392b;
 }
 
-/* Modal */
+.btn.adoptar {
+  background-color: #ff5252;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: 0.2s ease-in-out;
+  font-weight: bold;
+}
+
+.btn.adoptar:hover {
+  background-color: #ff2e2e;
+  transform: scale(1.05);
+}
+
+/* ====================== Modal ====================== */
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(28, 182, 193, 0.5);
+  background: rgba(0,0,0,0.6);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  backdrop-filter: blur(4px);
-  animation: fadeIn 0.3s ease forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 .modal {
-  background: #fff;
-  border-radius: 15px;
-  width: 90%;
-  max-width: 700px;
-  max-height: 85vh;
-  overflow-x: hidden;
-  overflow-y: auto;
+  background: white;
   padding: 25px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-  transform: translateY(-30px);
-  animation: slideIn 0.3s ease forwards;
-    box-sizing: border-box;
-}
-
-@keyframes slideIn {
-  from { transform: translateY(-30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  width: 90%;
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  animation: fadeIn 0.2s ease-in-out;
+  box-sizing: border-box;
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #1cb6c1;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .modal-header h3 {
-  color: #1cb6c1;
   margin: 0;
   font-size: 22px;
+  color: #1cb6c1;
 }
 
 .close-btn {
@@ -168,93 +168,69 @@ h2 {
   border: none;
   cursor: pointer;
   color: #1cb6c1;
-  transition: 0.2s;
 }
 
 .close-btn:hover {
   color: #17a2ad;
 }
 
-.modal-form .form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px 20px;
-}
-
 .modal-form label {
   font-weight: 600;
   color: #34495e;
+  display: block;
+  margin-top: 10px;
 }
 
 .modal-form input,
-.modal-form select,
 .modal-form textarea {
   width: 100%;
-  padding: 8px 12px;
+  margin: 8px 0 15px 0;
+  padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  box-sizing: border-box;
+  border-radius: 6px;
   font-size: 14px;
-  transition: border 0.2s;
 }
 
-.modal-form input:focus,
-.modal-form select:focus,
-.modal-form textarea:focus {
-  outline: none;
-  border-color: #1cb6c1;
-  box-shadow: 0 0 5px rgba(28, 182, 193, 0.5);
-}
-
-.checkbox-group {
-  grid-column: 1 / span 2;
-  display: flex;
-  justify-content: space-around;
-  margin-top: 10px;
+.modal-form textarea {
+  resize: vertical;
+  min-height: 70px;
 }
 
 .modal-buttons {
   display: flex;
-  justify-content: flex-end;
-  gap: 15px;
-  margin-top: 20px;
+  justify-content: space-between;
+  margin-top: 15px;
 }
 
-.modal-buttons .btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 600;
-  padding: 8px 16px;
-  border-radius: 8px;
+.modal-buttons .cancelar {
+  background: #bbb;
   border: none;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  font-size: 14px;
-}
-
-.btn.save {
-  background: #1cb6c1;
-  color: #fff;
-}
-
-.btn.save:hover {
-  background: #17a2ad;
-}
-
-.btn.cancel {
-  background: #e74c3c;
-  color: #fff;
-}
-
-.btn.cancel:hover {
-  background: #c0392b;
-}
-
-.btn.add {
-  background: #28a745;
-  color: white;
   padding: 10px 15px;
   border-radius: 6px;
-  margin-bottom: 20px;
+  cursor: pointer;
+  color: white;
+}
+
+.modal-buttons .cancelar:hover {
+  background: #999;
+}
+
+.modal-buttons .enviar {
+  background: #4caf50;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+}
+
+.modal-buttons .enviar:hover {
+  background: #45a049;
+}
+
+/* ====================== Animaciones ====================== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
 }

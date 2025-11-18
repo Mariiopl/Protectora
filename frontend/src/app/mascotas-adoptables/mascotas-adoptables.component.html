@@ -4,8 +4,9 @@
   <div *ngIf="cargando" class="loading">Cargando mascotas...</div>
 
   <div class="grid" *ngIf="!cargando && mascotas.length > 0">
+
     <div class="card" *ngFor="let mascota of mascotas">
-      
+
       <img [src]="'http://localhost:8080/api/mascotas/imagenes/' + mascota.foto" />
 
       <h3>{{ mascota.nombre }}</h3>
@@ -34,12 +35,42 @@
         <button class="btn info" (click)="toggleDetalles(mascota)">
           {{ mascota.mostrarDetalles ? 'Ver menos' : 'Ver más' }}
         </button>
+
+        <button class="btn adoptar" (click)="adoptar(mascota)">
+          ❤️ Adoptar
+        </button>
       </div>
 
     </div>
   </div>
 
   <div *ngIf="!cargando && mascotas.length === 0">
-    <p>No hay mascotas adoptadas 🐶🐱</p>
+    <p>No hay mascotas adoptables 🐶🐱</p>
+  </div>
+</div>
+
+<!-- MODAL ADOPCIÓN -->
+<div class="modal-backdrop" *ngIf="mostrarModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Formulario de Adopción: {{ mascotaSeleccionada?.nombre }}</h3>
+      <button class="close-btn" (click)="cerrarModal()">×</button>
+    </div>
+
+    <div class="modal-form">
+      <label>Experiencia con animales</label>
+      <textarea [(ngModel)]="adopcion.experiencia"></textarea>
+
+      <label>Tipo de vivienda</label>
+      <input type="text" [(ngModel)]="adopcion.tipoVivienda" />
+
+      <label>Comentarios</label>
+      <textarea [(ngModel)]="adopcion.comentarios"></textarea>
+
+      <div class="modal-buttons">
+        <button class="btn cancelar" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn enviar" (click)="enviarSolicitud()">Enviar</button>
+      </div>
+    </div>
   </div>
 </div>

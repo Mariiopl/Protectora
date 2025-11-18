@@ -83,7 +83,7 @@ public class AdopcionController {
     @PostMapping
     public ResponseEntity<AdopcionDto> create(@RequestBody AdopcionDto dto) {
         try {
-            Adopcion guardada = adopcionService.create(dto.getIdUsuario(), dto.getIdMascota(), dto);
+            Adopcion guardada = adopcionService.create(dto.idUsuario(), dto.idMascota(), dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(AdopcionDto.fromEntity(guardada));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();

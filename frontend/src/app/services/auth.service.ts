@@ -83,7 +83,7 @@ export class AuthService {
 
   getUserId(): number | null {
     const decoded: any = this.decodeToken();
-    return decoded?.id_usuario ?? null;
+    return decoded?.sub ? Number(decoded.sub) : null;
   }
 
   // === GUARDAR DATOS DESPUÉS DEL LOGIN ===

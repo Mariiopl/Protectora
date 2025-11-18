@@ -52,22 +52,25 @@ public class AdopcionService {
 
     // ======================
     // CREACIÓN / ACTUALIZACIÓN
-    // ======================
     public Adopcion create(Integer idUsuario, Integer idMascota, AdopcionDto dto) {
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         Mascota mascota = mascotaRepository.findById(idMascota)
                 .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
 
+        // Cambiamos el estado de la mascota a EN_PROCESO
+        mascota.setEstadoAdopcion(Mascota.EstadoAdopcion.en_proceso);
+        mascotaRepository.save(mascota); // Guardamos el cambio
+
         Adopcion adopcion = new Adopcion();
         adopcion.setUsuario(usuario);
         adopcion.setMascota(mascota);
-        adopcion.setEstado(dto.getEstado() != null ? dto.getEstado() : Adopcion.Estado.pendiente);
+        adopcion.setEstado(dto.estado() != null ? dto.estado() : Adopcion.Estado.pendiente);
         adopcion.setFechaSolicitud(LocalDate.now());
-        adopcion.setFechaAdopcion(dto.getFechaAdopcion());
-        adopcion.setExperiencia(dto.getExperiencia());
-        adopcion.setTipoVivienda(dto.getTipoVivienda());
-        adopcion.setComentarios(dto.getComentarios());
+        adopcion.setFechaAdopcion(dto.fechaAdopcion());
+        adopcion.setExperiencia(dto.experiencia());
+        adopcion.setTipoVivienda(dto.tipoVivienda());
+        adopcion.setComentarios(dto.comentarios());
 
         return adopcionRepository.save(adopcion);
     }
@@ -75,16 +78,16 @@ public class AdopcionService {
     public Adopcion update(Integer idAdopcion, AdopcionDto dto) {
         Adopcion adopcion = getById(idAdopcion);
 
-        if (dto.getEstado() != null)
-            adopcion.setEstado(dto.getEstado());
-        if (dto.getFechaAdopcion() != null)
-            adopcion.setFechaAdopcion(dto.getFechaAdopcion());
-        if (dto.getExperiencia() != null)
-            adopcion.setExperiencia(dto.getExperiencia());
-        if (dto.getTipoVivienda() != null)
-            adopcion.setTipoVivienda(dto.getTipoVivienda());
-        if (dto.getComentarios() != null)
-            adopcion.setComentarios(dto.getComentarios());
+        if (dto.estado() != null)
+            adopcion.setEstado(dto.estado());
+        if (dto.fechaAdopcion() != null)
+            adopcion.setFechaAdopcion(dto.fechaAdopcion());
+        if (dto.experiencia() != null)
+            adopcion.setExperiencia(dto.experiencia());
+        if (dto.tipoVivienda() != null)
+            adopcion.setTipoVivienda(dto.tipoVivienda());
+        if (dto.comentarios() != null)
+            adopcion.setComentarios(dto.comentarios());
 
         return adopcionRepository.save(adopcion);
     }
