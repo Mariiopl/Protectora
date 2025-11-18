@@ -1,7 +1,7 @@
 <div class="usuarios-container">
   <h2>Gestión de Usuarios</h2>
 
-  <table>
+  <table class="tabla-usuarios">
     <thead>
       <tr>
         <th>ID</th>
@@ -14,22 +14,62 @@
         <th>Acciones</th>
       </tr>
     </thead>
+
     <tbody>
       <tr *ngFor="let usuario of usuarios">
         <td>{{ usuario.idUsuario }}</td>
         <td>{{ usuario.nombre }}</td>
         <td>{{ usuario.email }}</td>
-        <td>{{ usuario.telefono || '-' }}</td>
-        <td>{{ usuario.direccion || '-' }}</td>
+        <td>{{ usuario.telefono || "-" }}</td>
+        <td>{{ usuario.direccion || "-" }}</td>
         <td>{{ usuario.tipoUsuario }}</td>
         <td>{{ usuario.fechaRegistro }}</td>
         <td>
-          <button (click)="editarUsuario(usuario)">Editar</button>
-          <button (click)="eliminarUsuario(usuario.idUsuario)">Eliminar</button>
+          <button class="btn editar" (click)="editarUsuario(usuario)">
+            Editar
+          </button>
+          <button class="btn eliminar" (click)="eliminarUsuario(usuario.idUsuario)">
+            Eliminar
+          </button>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <button (click)="nuevoUsuario()">+ Nuevo Usuario</button>
+  <button class="btn nuevo" (click)="nuevoUsuario()">+ Nuevo Usuario</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal" *ngIf="modalVisible">
+  <div class="modal-content">
+    <h3>{{ editando ? 'Editar Usuario' : 'Nuevo Usuario' }}</h3>
+
+    <label>Nombre</label>
+    <input [(ngModel)]="form.nombre" type="text" />
+
+    <label>Email</label>
+    <input [(ngModel)]="form.email" type="email" />
+
+    <label>Teléfono</label>
+    <input [(ngModel)]="form.telefono" type="text" />
+
+    <label>Dirección</label>
+    <input [(ngModel)]="form.direccion" type="text" />
+
+    <label>Tipo de Usuario</label>
+    <select [(ngModel)]="form.tipoUsuario">
+      <option value="adoptante">Adoptante</option>
+      <option value="voluntario">Voluntario</option>
+      <option value="empleado">Empleado</option>
+      <option value="administrador">Administrador</option>
+    </select>
+
+    <label>Contraseña (solo si deseas cambiarla)</label>
+    <input [(ngModel)]="form.contrasena" type="password" placeholder="Nueva contraseña" />
+
+    <div class="modal-actions">
+      <button class="guardar" (click)="guardar()">Guardar</button>
+      <button class="cancelar" (click)="cerrarModal()">Cancelar</button>
+    </div>
+  </div>
 </div>
