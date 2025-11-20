@@ -63,10 +63,6 @@
       <option value="empleado">Empleado</option>
       <option value="administrador">Administrador</option>
     </select>
-
-    <label>Contraseña (solo si deseas cambiarla)</label>
-    <input [(ngModel)]="form.contrasena" type="password" placeholder="Nueva contraseña" />
-
     <div class="modal-actions">
       <button class="guardar" (click)="guardar()">Guardar</button>
       <button class="cancelar" (click)="cerrarModal()">Cancelar</button>

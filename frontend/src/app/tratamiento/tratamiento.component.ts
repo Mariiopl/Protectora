@@ -1,50 +1,111 @@
 import { Component, OnInit } from '@angular/core';
+import { TratamientoService } from '../services/tratamiento.service';
 import {
-  Tratamiento,
-  TratamientoService,
-} from '../services/tratamiento.service';
-import { CommonModule } from '@angular/common';
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MascotaService } from '../services/mascota.service';
+import { EmpleadoService } from '../services/empleado.service';
+import { Tratamiento, TratamientoDTO } from '../interfaces/tratamiento.model';
+import { Mascota } from '../interfaces/mascota.model';
+import { Empleado } from '../interfaces/empleado.model';
 
 @Component({
-  selector: 'app-tratamientos',
+  standalone: true,
+  imports: [ReactiveFormsModule],
+  selector: 'app-tratamiento',
   templateUrl: './tratamiento.component.html',
   styleUrls: ['./tratamiento.component.css'],
-  imports: [CommonModule],
-  standalone: true,
 })
 export class TratamientoComponent implements OnInit {
   tratamientos: Tratamiento[] = [];
-  error: string | null = null;
+  mascotas: Mascota[] = [];
+  veterinarios: Empleado[] = [];
+  form: FormGroup;
+  tipos = ['vacuna', 'desparasitación', 'cirugía', 'otro'];
+  editMode = false;
+  editId: number | null = null;
 
-  constructor(private tratamientoService: TratamientoService) {}
+  constructor(
+    private tratamientoService: TratamientoService,
+    private mascotaService: MascotaService,
+    private empleadoService: EmpleadoService,
+    private fb: FormBuilder
+  ) {
+    this.form = this.fb.group({
+      idMascota: [null, Validators.required],
+      tipo: [null, Validators.required],
+      descripcion: ['', [Validators.required, Validators.maxLength(500)]],
+      fecha: [null, Validators.required],
+      idVeterinario: [null, Validators.required],
+    });
+  }
 
   ngOnInit(): void {
-    this.cargarTratamientos();
+    this.loadTratamientos();
+    this.loadMascotas();
+    this.loadVeterinarios();
   }
 
-  cargarTratamientos() {
-    this.tratamientoService.getTratamientos().subscribe({
-      next: (data) => (this.tratamientos = data),
-      error: (err) => {
-        console.error('Error cargando tratamientos', err);
-        this.error = 'No se pudieron cargar los tratamientos.';
-      },
+  loadTratamientos() {
+    this.tratamientoService
+      .getTratamientos()
+      .subscribe((data) => (this.tratamientos = data));
+  }
+
+  loadMascotas() {
+    this.mascotaService
+      .getAdoptables()
+      .subscribe((data) => (this.mascotas = data));
+  }
+
+  loadVeterinarios() {
+    this.empleadoService
+      .getVeterinarios()
+      .subscribe((data) => (this.veterinarios = data));
+  }
+
+  submit() {
+    const dto: TratamientoDTO = this.form.value;
+
+    if (this.editMode && this.editId) {
+      this.tratamientoService
+        .updateTratamiento(this.editId, dto)
+        .subscribe(() => {
+          this.loadTratamientos();
+          this.resetForm();
+        });
+    } else {
+      this.tratamientoService.createTratamiento(dto).subscribe(() => {
+        this.loadTratamientos();
+        this.resetForm();
+      });
+    }
+  }
+
+  edit(tratamiento: Tratamiento) {
+    this.editMode = true;
+    this.editId = tratamiento.idTratamiento ?? null;
+    this.form.patchValue({
+      idMascota: tratamiento.mascota.idMascota,
+      tipo: tratamiento.tipo,
+      descripcion: tratamiento.descripcion,
+      fecha: tratamiento.fecha,
+      idVeterinario: tratamiento.veterinario,
     });
   }
 
-  eliminarTratamiento(id: number) {
-    if (!confirm('¿Seguro que quieres eliminar este tratamiento?')) return;
+  delete(id: number) {
+    this.tratamientoService
+      .deleteTratamiento(id)
+      .subscribe(() => this.loadTratamientos());
+  }
 
-    this.tratamientoService.deleteTratamiento(id).subscribe({
-      next: () => {
-        this.tratamientos = this.tratamientos.filter(
-          (t) => t.idTratamiento !== id
-        );
-      },
-      error: (err) => {
-        console.error('Error eliminando tratamiento', err);
-        alert('No se pudo eliminar el tratamiento.');
-      },
-    });
+  resetForm() {
+    this.form.reset();
+    this.editMode = false;
+    this.editId = null;
   }
 }

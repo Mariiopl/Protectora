@@ -1,5 +1,6 @@
 package com.protectora.backend.controller;
 
+import com.protectora.backend.dto.TratamientoDto;
 import com.protectora.backend.model.Tratamiento;
 import com.protectora.backend.services.TratamientoService;
 import jakarta.validation.Valid;
@@ -20,8 +21,8 @@ public class TratamientoController {
     }
 
     @GetMapping
-    public List<Tratamiento> getAllTratamientos() {
-        return tratamientoService.findAll();
+    public ResponseEntity<List<Tratamiento>> getAllTratamientos() {
+        return ResponseEntity.ok(tratamientoService.findAll());
     }
 
     @GetMapping("/{id}")
@@ -32,35 +33,22 @@ public class TratamientoController {
     }
 
     @PostMapping
-    public ResponseEntity<Tratamiento> createTratamiento(@Valid @RequestBody Tratamiento tratamiento) {
-        Tratamiento saved = tratamientoService.save(tratamiento);
+    public ResponseEntity<Tratamiento> createTratamiento(@Valid @RequestBody TratamientoDto dto) {
+        Tratamiento saved = tratamientoService.saveFromDTO(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Tratamiento> updateTratamiento(
             @PathVariable Integer id,
-            @Valid @RequestBody Tratamiento tratamientoDetails) {
-
-        return tratamientoService.findById(id)
-                .map(trat -> {
-                    trat.setMascota(tratamientoDetails.getMascota());
-                    trat.setTipo(tratamientoDetails.getTipo());
-                    trat.setDescripcion(tratamientoDetails.getDescripcion());
-                    trat.setFecha(tratamientoDetails.getFecha());
-                    trat.setVeterinario(tratamientoDetails.getVeterinario());
-                    Tratamiento updated = tratamientoService.save(trat);
-                    return ResponseEntity.ok(updated);
-                })
-                .orElse(ResponseEntity.notFound().build());
+            @Valid @RequestBody TratamientoDto dto) {
+        Tratamiento updated = tratamientoService.updateFromDTO(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTratamiento(@PathVariable Integer id) {
-        if (tratamientoService.findById(id).isPresent()) {
-            tratamientoService.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+        tratamientoService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

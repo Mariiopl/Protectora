@@ -14,6 +14,7 @@ import { CompraListComponent } from './inventario/compra-list/compra-list.compon
 import { CompraFormComponent } from './inventario/compra-form/compra-form.component';
 import { MascotasAdoptablesComponent } from './mascotas-adoptables/mascotas-adoptables.component';
 import { DonacionesComponent } from './donaciones/donaciones.component';
+import { VeterinarioTratamientosComponent } from './components/veterinario-tratamientos/veterinario-tratamientos.component';
 
 export const appRoutes: Routes = [
   { path: '', redirectTo: '/register', pathMatch: 'full' },
@@ -33,6 +34,12 @@ export const appRoutes: Routes = [
   {
     path: 'empleados',
     component: EmpleadosComponent,
+    canActivate: [AuthGuard],
+  },
+  //Veterinario
+  {
+    path: 'veterinario-tratamientos',
+    component: VeterinarioTratamientosComponent,
     canActivate: [AuthGuard],
   },
   {

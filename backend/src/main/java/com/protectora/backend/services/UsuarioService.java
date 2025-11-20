@@ -1,5 +1,6 @@
 package com.protectora.backend.services;
 
+import com.protectora.backend.dto.UsuarioUpdateDto;
 import com.protectora.backend.model.Usuario;
 import com.protectora.backend.repository.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -63,4 +64,24 @@ public class UsuarioService {
     public Optional<Usuario> findByNombre(String nombre) {
         return usuarioRepository.findByNombre(nombre);
     }
+
+    public Usuario updateUsuario(Integer id, UsuarioUpdateDto dto) {
+
+        Usuario u = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        if (dto.getNombre() != null)
+            u.setNombre(dto.getNombre());
+        if (dto.getEmail() != null)
+            u.setEmail(dto.getEmail());
+        if (dto.getTelefono() != null)
+            u.setTelefono(dto.getTelefono());
+        if (dto.getDireccion() != null)
+            u.setDireccion(dto.getDireccion());
+        if (dto.getTipoUsuario() != null)
+            u.setTipoUsuario(dto.getTipoUsuario());
+
+        return usuarioRepository.save(u);
+    }
+
 }

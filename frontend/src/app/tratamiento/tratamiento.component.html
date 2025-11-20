@@ -1,9 +1,44 @@
-<div class="tratamientos-container">
-  <h2>Lista de Tratamientos</h2>
+<div class="container">
+  <h2>Gestión de Tratamientos</h2>
 
-  <div *ngIf="error" class="error">{{ error }}</div>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div>
+      <label>Mascota:</label>
+      <select formControlName="idMascota">
+        <option *ngFor="let m of mascotas" [value]="m.idMascota">{{ m.nombre }}</option>
+      </select>
+    </div>
 
-  <table *ngIf="tratamientos.length > 0">
+    <div>
+      <label>Tipo:</label>
+      <select formControlName="tipo">
+        <option *ngFor="let t of tipos" [value]="t">{{ t }}</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Descripción:</label>
+      <textarea formControlName="descripcion"></textarea>
+    </div>
+
+    <div>
+      <label>Fecha:</label>
+      <input type="date" formControlName="fecha">
+    </div>
+
+    <div>
+      <label>Veterinario:</label>
+      <select formControlName="idVeterinario">
+        <option *ngFor="let v of veterinarios" [value]="v.idEmpleado">{{ v.nombre }}</option>
+      </select>
+    </div>
+
+    <button type="submit">{{ editMode ? 'Actualizar' : 'Crear' }}</button>
+    <button type="button" (click)="resetForm()">Cancelar</button>
+  </form>
+
+  <h3>Lista de Tratamientos</h3>
+  <table>
     <thead>
       <tr>
         <th>Mascota</th>
@@ -15,20 +50,17 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let tratamiento of tratamientos">
-        <td>{{ tratamiento.mascota.idMascota }}</td>
-        <td>{{ tratamiento.tipo }}</td>
-        <td>{{ tratamiento.descripcion }}</td>
-        <td>{{ tratamiento.fecha }}</td>
-        <td>{{ tratamiento.veterinario.idEmpleado }}</td>
+      <tr *ngFor="let t of tratamientos">
+        <td>{{ t.mascota.nombre }}</td>
+        <td>{{ t.tipo }}</td>
+        <td>{{ t.descripcion }}</td>
+        <td>{{ t.fecha }}</td>
+        <td>{{ t.veterinario.nombre }}</td>
         <td>
-          <button (click)="eliminarTratamiento(tratamiento.idTratamiento!)">Eliminar</button>
+          <button (click)="edit(t)">Editar</button>
+          <button (click)="delete(t.idTratamiento)">Eliminar</button>
         </td>
       </tr>
     </tbody>
   </table>
-
-  <div *ngIf="tratamientos.length === 0 && !error">
-    No hay tratamientos disponibles.
-  </div>
 </div>

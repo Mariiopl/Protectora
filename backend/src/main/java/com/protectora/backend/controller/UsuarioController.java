@@ -1,5 +1,6 @@
 package com.protectora.backend.controller;
 
+import com.protectora.backend.dto.UsuarioUpdateDto;
 import com.protectora.backend.model.Usuario;
 import com.protectora.backend.services.UsuarioService;
 import jakarta.validation.Valid;
@@ -44,19 +45,9 @@ public class UsuarioController {
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> updateUsuario(
             @PathVariable Integer id,
-            @Valid @RequestBody Usuario usuarioDetails) {
-
-        return usuarioService.findById(id)
-                .map(usuario -> {
-                    usuario.setNombre(usuarioDetails.getNombre());
-                    usuario.setEmail(usuarioDetails.getEmail());
-                    usuario.setContrasena(usuarioDetails.getContrasena());
-                    usuario.setTelefono(usuarioDetails.getTelefono());
-                    usuario.setDireccion(usuarioDetails.getDireccion());
-                    usuario.setTipoUsuario(usuarioDetails.getTipoUsuario());
-                    Usuario updated = usuarioService.save(usuario);
-                    return ResponseEntity.ok(updated);
-                }).orElse(ResponseEntity.notFound().build());
+            @RequestBody UsuarioUpdateDto dto) {
+        Usuario actualizado = usuarioService.updateUsuario(id, dto);
+        return ResponseEntity.ok(actualizado);
     }
 
     // Eliminar usuario

@@ -1,11 +1,23 @@
-import { Empleado } from './empleado.model';
-import { Mascota } from './mascota.model';
+export interface TratamientoDTO {
+  idMascota: number;
+  tipo: 'vacuna' | 'desparasitación' | 'cirugía' | 'otro';
+  descripcion: string;
+  fecha: string;
+  idVeterinario: number;
+}
 
 export interface Tratamiento {
-  idTratamiento: number;
-  mascota: Mascota;
-  tipo: 'vacuna' | 'desparasitación' | 'cirugía' | 'otro';
-  descripcion?: string;
+  idTratamiento?: number; // opcional, porque al crear puede venir undefined
+  mascota: {
+    idMascota: number;
+    nombre: string;
+    // agrega lo que necesites
+  };
+  tipo: string;
+  descripcion: string;
   fecha: string;
-  veterinario: Empleado;
+  veterinario?: {
+    idEmpleado: number;
+    nombre: string;
+  };
 }

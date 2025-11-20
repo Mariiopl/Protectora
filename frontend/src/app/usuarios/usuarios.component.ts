@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UsuariosService, Usuario } from '../services/usuario.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-usuarios',
@@ -47,7 +48,6 @@ export class UsuariosComponent implements OnInit {
       telefono: '',
       direccion: '',
       tipoUsuario: 'adoptante',
-      contrasena: '',
     };
     this.modalVisible = true;
   }
@@ -61,7 +61,6 @@ export class UsuariosComponent implements OnInit {
       telefono: usuario.telefono,
       direccion: usuario.direccion,
       tipoUsuario: usuario.tipoUsuario,
-      contrasena: '',
     };
     this.modalVisible = true;
   }
@@ -94,13 +93,51 @@ export class UsuariosComponent implements OnInit {
   }
 
   eliminarUsuario(id: number | undefined) {
+    console.log('ID recibido:', id);
+
     if (!id) return;
-    if (confirm('¿Seguro que quieres eliminar este usuario?')) {
-      this.usuariosService.eliminarUsuario(id).subscribe({
-        next: () => this.cargarUsuarios(),
-        error: (err) => console.error('Error eliminando usuario', err),
-      });
-    }
+
+    Swal.fire({
+      title: '¿Eliminar usuario?',
+      text: 'Esta acción no se puede deshacer.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.usuariosService.eliminarUsuario(id).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Usuario eliminado',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            this.cargarUsuarios();
+          },
+          error: (err) => {
+            console.error('Error eliminando usuario', err);
+
+            if (err.status === 409) {
+              Swal.fire({
+                icon: 'error',
+                title: 'No se puede eliminar',
+                text: 'Este usuario tiene datos asociados y no puede eliminarse.',
+              });
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error al eliminar',
+                text: 'Ocurrió un error inesperado.',
+              });
+            }
+          },
+        });
+      }
+    });
   }
 
   cerrarModal() {

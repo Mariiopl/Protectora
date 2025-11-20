@@ -31,6 +31,11 @@ public class EmpleadoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/veterinarios")
+    public List<Empleado> getVeterinarios() {
+        return empleadoService.findVeterinarios();
+    }
+
     @PostMapping
     public ResponseEntity<Empleado> createEmpleado(@Valid @RequestBody Empleado empleado) {
         Empleado saved = empleadoService.save(empleado);

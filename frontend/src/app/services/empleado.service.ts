@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Empleado } from '../interfaces/empleado.model';
 import { Observable, catchError, throwError } from 'rxjs';
 
@@ -38,5 +38,10 @@ export class EmpleadoService {
   private handleError(error: any) {
     console.error('Error EmpleadoService', error);
     return throwError(() => error);
+  }
+
+  getVeterinarios(): Observable<Empleado[]> {
+    const params = new HttpParams().set('rol', 'veterinario');
+    return this.http.get<Empleado[]>(this.apiUrl, { params });
   }
 }

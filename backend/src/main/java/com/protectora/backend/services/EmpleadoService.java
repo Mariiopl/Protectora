@@ -20,6 +20,10 @@ public class EmpleadoService {
         return empleadoRepository.findAll();
     }
 
+    public List<Empleado> findVeterinarios() {
+        return empleadoRepository.findByRol("veterinario");
+    }
+
     public Optional<Empleado> findById(Integer id) {
         return empleadoRepository.findById(id);
     }

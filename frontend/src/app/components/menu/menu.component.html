@@ -26,6 +26,10 @@
         <a routerLink="/adopciones">Mascotas Adoptadas</a>        
       </li>
 
+      <li *appHasRole="'empleado'" routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+        <a routerLink="/veterinario-tratamientos">veterinario-tratamientos</a>        
+      </li>
+
 
       <!-- Desplegable de gestión interna -->
       <li class="dropdown" *appHasRole="['administrador','empleado']">
