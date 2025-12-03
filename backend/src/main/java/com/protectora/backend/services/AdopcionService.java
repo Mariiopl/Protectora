@@ -1,8 +1,11 @@
 package com.protectora.backend.services;
 
 import com.protectora.backend.dto.AdopcionDto;
+import com.protectora.backend.dto.SolicitudAdopcionDto;
 import com.protectora.backend.model.Adopcion;
+import com.protectora.backend.model.Adopcion.Estado;
 import com.protectora.backend.model.Mascota;
+import com.protectora.backend.model.Mascota.EstadoAdopcion;
 import com.protectora.backend.model.Usuario;
 import com.protectora.backend.repository.AdopcionRepository;
 import com.protectora.backend.repository.MascotaRepository;
@@ -97,4 +100,15 @@ public class AdopcionService {
         adopcionRepository.delete(adopcion);
     }
 
+    public List<SolicitudAdopcionDto> obtenerPendientes() {
+        return adopcionRepository.obtenerPendientes();
+    }
+
+    public void cambiarEstado(Integer idAdopcion, Adopcion.Estado nuevoEstado) {
+        Adopcion adopcion = adopcionRepository.findById(idAdopcion)
+                .orElseThrow(() -> new RuntimeException("Adopción no encontrada"));
+
+        adopcion.setEstado(nuevoEstado);
+        adopcionRepository.save(adopcion);
+    }
 }

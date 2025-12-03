@@ -1,0 +1,65 @@
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.08);
+}
+
+.titulo {
+  text-align: center;
+  color: #4CAF50;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla th {
+  background: #4CAF50;
+  color: white;
+  padding: 10px;
+}
+
+.tabla td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-aceptar {
+  background: #4CAF50;
+  color: white;
+  border: none;
+}
+
+.btn-rechazar {
+  background: #e53935;
+  color: white;
+  border: none;
+  margin-left: 10px;
+}
+
+.btn-aceptar:hover {
+  background: #43a047;
+}
+
+.btn-rechazar:hover {
+  background: #d32f2f;
+}
+
+.no-data {
+  text-align: center;
+  margin-top: 15px;
+  color: #777;
+}

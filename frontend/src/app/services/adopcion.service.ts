@@ -37,4 +37,15 @@ export class AdopcionService {
       headers: this.getAuthHeaders(),
     });
   }
+
+  getPendientes(): Observable<SolicitudAdopcion[]> {
+    return this.http.get<SolicitudAdopcion[]>(`${this.apiUrl}/pendientes`);
+  }
+
+  cambiarEstado(id: number, nuevoEstado: string): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/${id}/estado?nuevoEstado=${nuevoEstado}`,
+      {}
+    );
+  }
 }

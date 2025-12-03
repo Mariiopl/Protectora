@@ -20,9 +20,6 @@
       </li>
      <!-- Sección Adoptante -->
       <li *appHasRole="'adoptante'" routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
-        <a routerLink="/tratamientos">Tratamientos</a>        
-      </li>
-      <li *appHasRole="'adoptante'" routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
         <a routerLink="/adopciones">Mascotas Adoptadas</a>        
       </li>
 
@@ -40,6 +37,9 @@
           </li>
           <li *appHasRole="'administrador'" routerLinkActive="active-item">
             <a routerLink="/usuarios">Usuarios</a>
+          </li>
+          <li *appHasRole="'empleado'" routerLinkActive="active-item">
+            <a routerLink="/solicitudesAdopcion">Solicitudes de Adopciones</a>
           </li>
           <li routerLinkActive="active-item">
             <a routerLink="/seguimientos">Seguimientos</a>

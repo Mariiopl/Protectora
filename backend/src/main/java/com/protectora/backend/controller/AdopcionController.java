@@ -1,8 +1,11 @@
 package com.protectora.backend.controller;
 
 import com.protectora.backend.dto.AdopcionDto;
+import com.protectora.backend.dto.SolicitudAdopcionDto;
 import com.protectora.backend.model.Adopcion;
+import com.protectora.backend.model.Mascota.EstadoAdopcion;
 import com.protectora.backend.model.Usuario;
+import com.protectora.backend.model.Adopcion.Estado;
 import com.protectora.backend.security.JwtTokenProvider;
 import com.protectora.backend.services.AdopcionService;
 import com.protectora.backend.services.UsuarioService;
@@ -115,4 +118,17 @@ public class AdopcionController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/pendientes")
+    public List<SolicitudAdopcionDto> obtenerPendientes() {
+        return adopcionService.obtenerPendientes();
+    }
+
+    @PutMapping("/{id}/estado")
+    public void cambiarEstado(
+            @PathVariable Integer id,
+            @RequestParam String nuevoEstado) {
+        adopcionService.cambiarEstado(id, Adopcion.Estado.valueOf(nuevoEstado));
+    }
+
 }

@@ -7,7 +7,6 @@ import { AdopcionesComponent } from './adopciones/adopciones.component';
 import { EmpleadosComponent } from './empleados/empleados.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { TareasComponent } from './tareas/tareas.component';
-import { TratamientoComponent } from './tratamiento/tratamiento.component';
 import { TurnosComponent } from './turnos/turnos.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { CompraListComponent } from './inventario/compra-list/compra-list.component';
@@ -15,6 +14,7 @@ import { CompraFormComponent } from './inventario/compra-form/compra-form.compon
 import { MascotasAdoptablesComponent } from './mascotas-adoptables/mascotas-adoptables.component';
 import { DonacionesComponent } from './donaciones/donaciones.component';
 import { VeterinarioTratamientosComponent } from './components/veterinario-tratamientos/veterinario-tratamientos.component';
+import { SolicitudesAdopcionesComponent } from './components/solicitudes-adopciones/solicitudes-adopciones.component';
 
 export const appRoutes: Routes = [
   { path: '', redirectTo: '/register', pathMatch: 'full' },
@@ -47,15 +47,15 @@ export const appRoutes: Routes = [
     component: DonacionesComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'solicitudesAdopcion',
+    component: SolicitudesAdopcionesComponent,
+    canActivate: [AuthGuard],
+  },
   { path: 'perfil', component: PerfilComponent, canActivate: [AuthGuard] },
   { path: 'tareas', component: TareasComponent, canActivate: [AuthGuard] },
   { path: 'turnos', component: TurnosComponent, canActivate: [AuthGuard] },
   { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
-  {
-    path: 'tratamientos',
-    component: TratamientoComponent,
-    canActivate: [AuthGuard],
-  },
 
   // RUTAS DE INVENTARIO
   {
