@@ -38,8 +38,8 @@ export class AdopcionService {
     });
   }
 
-  getPendientes(): Observable<SolicitudAdopcion[]> {
-    return this.http.get<SolicitudAdopcion[]>(`${this.apiUrl}/pendientes`);
+  getPendientes(): Observable<Adopcion[]> {
+    return this.http.get<Adopcion[]>(`${this.apiUrl}/pendientes`);
   }
 
   cambiarEstado(id: number, nuevoEstado: string): Observable<void> {
