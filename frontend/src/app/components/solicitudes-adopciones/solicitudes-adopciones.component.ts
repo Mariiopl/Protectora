@@ -21,7 +21,7 @@ export class SolicitudesAdopcionesComponent implements OnInit {
   }
 
   cargarSolicitudes() {
-    this.adopcionService.getSolicitudesPendientes().subscribe({
+    this.adopcionService.getPendientes().subscribe({
       next: (data) => {
         this.solicitudes = data;
         this.cargando = false;

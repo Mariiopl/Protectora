@@ -5,16 +5,12 @@ import com.protectora.backend.model.Mascota;
 import com.protectora.backend.repository.MascotaRepository;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,11 +18,19 @@ import java.util.List;
 public class MascotaService {
 
     private final MascotaRepository mascotaRepository;
-    private final String uploadDir = "I:/Protectora/frontend/src/assets/mascotas/";
+
+    // RUTA RELATIVA (dentro del backend), válida en cualquier equipo
+    private final Path uploadDir = Paths.get("uploads/mascotas");
 
     public MascotaService(MascotaRepository mascotaRepository) {
         this.mascotaRepository = mascotaRepository;
-        new File(uploadDir).mkdirs();
+
+        // Crea la carpeta si no existe
+        try {
+            Files.createDirectories(uploadDir);
+        } catch (IOException e) {
+            throw new RuntimeException("No se pudo crear el directorio de imágenes", e);
+        }
     }
 
     public List<Mascota> getAll() {
@@ -42,6 +46,7 @@ public class MascotaService {
         Mascota mascota = dto.toEntity();
         mascota.setFechaIngreso(LocalDate.now());
         mascota.setEstadoAdopcion(Mascota.EstadoAdopcion.adoptable);
+
         mascota = mascotaRepository.save(mascota);
 
         if (foto != null && !foto.isEmpty()) {
@@ -73,18 +78,23 @@ public class MascotaService {
     }
 
     public Resource getImage(String filename) throws IOException {
-        Path file = Paths.get(uploadDir).resolve(filename);
+        Path file = uploadDir.resolve(filename);
+
         if (!Files.exists(file)) {
             throw new RuntimeException("La imagen no existe");
         }
+
         return new UrlResource(file.toUri());
     }
 
     private String guardarImagen(MultipartFile foto) {
         try {
             String nombreArchivo = System.currentTimeMillis() + "_" + foto.getOriginalFilename();
-            File destino = new File(uploadDir + nombreArchivo);
-            foto.transferTo(destino);
+            Path destino = uploadDir.resolve(nombreArchivo);
+
+            // Guardar archivo
+            Files.copy(foto.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+
             return nombreArchivo;
         } catch (IOException e) {
             throw new RuntimeException("Error al guardar la imagen", e);
@@ -98,5 +108,4 @@ public class MascotaService {
     public List<Mascota> getAdoptado() {
         return mascotaRepository.findByEstadoAdopcion(Mascota.EstadoAdopcion.adoptado);
     }
-
 }
