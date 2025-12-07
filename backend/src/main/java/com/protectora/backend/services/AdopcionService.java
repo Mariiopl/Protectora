@@ -100,7 +100,7 @@ public class AdopcionService {
         adopcionRepository.delete(adopcion);
     }
 
-    public List<SolicitudAdopcionDto> obtenerPendientes() {
+    public List<AdopcionDto> obtenerPendientes() {
         return adopcionRepository.obtenerPendientes();
     }
 
@@ -108,7 +108,25 @@ public class AdopcionService {
         Adopcion adopcion = adopcionRepository.findById(idAdopcion)
                 .orElseThrow(() -> new RuntimeException("Adopción no encontrada"));
 
+        // Cambiar estado de la adopción
         adopcion.setEstado(nuevoEstado);
         adopcionRepository.save(adopcion);
+
+        // Cambiar estado de la mascota asociada
+        Mascota mascota = adopcion.getMascota();
+        if (mascota != null) {
+            switch (nuevoEstado) {
+                case aceptada: // o el nombre que uses para "aceptada"
+                    mascota.setEstadoAdopcion(Mascota.EstadoAdopcion.adoptado); // o el enum que tengas
+                    break;
+                case rechazada: // si quieres manejar rechazadas
+                    mascota.setEstadoAdopcion(Mascota.EstadoAdopcion.adoptable);
+                    break;
+                default:
+                    // otros estados si es necesario
+            }
+            mascotaRepository.save(mascota);
+        }
     }
+
 }

@@ -4,29 +4,35 @@
   <table class="tabla" *ngIf="solicitudes.length > 0">
     <thead>
       <tr>
-        <th>ID</th>
         <th>Adoptante</th>
         <th>Mascota</th>
+        <th>Foto</th>
         <th>Fecha solicitud</th>
+        <th>Experiencia</th>
+        <th>Tipo vivienda</th>
+        <th>Comentarios</th>
         <th>Acciones</th>
       </tr>
     </thead>
 
     <tbody>
       <tr *ngFor="let s of solicitudes">
-        <td>{{ s.idAdopcion }}</td>
         <td>{{ s.nombreUsuario }}</td>
         <td>{{ s.nombreMascota }}</td>
-        <td>{{ s.fechaSolicitud }}</td>
-
         <td>
-          <button class="btn btn-aceptar" (click)="aprobar(s.idAdopcion)">
-            ✔ Aceptar
-          </button>
-
-          <button class="btn btn-rechazar" (click)="rechazar(s.idAdopcion)">
-            ✖ Rechazar
-          </button>
+          <img
+            [src]="'http://localhost:8080/api/mascotas/imagenes/' + s.fotoMascota"
+            alt="Foto mascota"
+            class="foto-mascota"
+          />
+        </td>
+        <td>{{ s.fechaSolicitud }}</td>
+        <td>{{ s.experiencia }}</td>
+        <td>{{ s.tipoVivienda }}</td>
+        <td>{{ s.comentarios }}</td>
+        <td>
+          <button class="btn btn-aceptar" (click)="aprobar(s.idAdopcion)">✔ Aceptar</button>
+          <button class="btn btn-rechazar" (click)="rechazar(s.idAdopcion)">✖ Rechazar</button>
         </td>
       </tr>
     </tbody>

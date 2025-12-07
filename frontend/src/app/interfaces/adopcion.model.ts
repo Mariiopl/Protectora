@@ -6,4 +6,9 @@ export interface Adopcion {
   experiencia?: string;
   tipoVivienda?: string;
   comentarios?: string;
+
+  // Campos adicionales para mostrar
+  nombreUsuario?: string;
+  nombreMascota?: string;
+  fotoMascota?: string;
 }

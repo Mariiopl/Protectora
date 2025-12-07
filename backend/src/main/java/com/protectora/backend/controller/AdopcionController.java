@@ -120,7 +120,7 @@ public class AdopcionController {
     }
 
     @GetMapping("/pendientes")
-    public List<SolicitudAdopcionDto> obtenerPendientes() {
+    public List<AdopcionDto> obtenerPendientes() {
         return adopcionService.obtenerPendientes();
     }
 

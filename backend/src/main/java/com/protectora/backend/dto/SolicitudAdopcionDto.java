@@ -1,20 +1,15 @@
 package com.protectora.backend.dto;
 
-import java.sql.Date;
+import com.protectora.backend.model.Adopcion;
+import java.time.LocalDate;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class SolicitudAdopcionDto {
-    private int idAdopcion;
-    private String estado;
-    private Date fechaSolicitud;
-    private int idUsuario;
-    private String nombreUsuario;
-    private int idMascota;
-    private String nombreMascota;
+public record SolicitudAdopcionDto(
+        Integer idAdopcion,
+        Adopcion.Estado estado,
+        LocalDate fechaSolicitud,
+        Integer idUsuario,
+        String nombreUsuario,
+        Integer idMascota,
+        String nombreMascota,
+        String fotoMascota) {
 }
