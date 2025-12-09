@@ -1,30 +1,46 @@
 <div class="container">
-  <h2>Adopciones</h2>
+  <h2>Mis Adopciones</h2>
 
   <div *ngIf="cargando">Cargando adopciones...</div>
 
-  <table *ngIf="!cargando && adopciones.length > 0">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Mascota</th>
-        <th>Usuario</th>
-        <th>Estado</th>
-        <th>Fecha Solicitud</th>
-        <th>Fecha Adopción</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let a of adopciones">
-        <td>{{ a.idAdopcion }}</td>
-        <td>{{ a.idMascota }}</td>
-        <td>{{ a.idUsuario }}</td>
-        <td>{{ a.fechaSolicitud }}</td>
-      </tr>
-    </tbody>
-  </table>
+<div class="adopciones-grid" *ngIf="!cargando && (adopciones?.length ?? 0) > 0">
+    <div class="adopcion-card" *ngFor="let a of adopciones">
+      <img 
+        [src]="a?.fotoMascota" 
+        [alt]="a?.nombreMascota" 
+        class="foto-mascota"
+      >
 
-  <div *ngIf="!cargando && adopciones.length === 0">
-    <p>No hay adopciones registradas.</p>
+      <h3>{{ a?.nombreMascota }}</h3>
+
+      <p>Fecha solicitud: {{ a?.fechaSolicitud | date }}</p>
+
+      <button (click)="verAdopcion(a)">Ver detalles</button>
+    </div>
+  </div>
+
+  <div *ngIf="!cargando && adopciones?.length === 0">
+    <p>No tienes adopciones registradas.</p>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" *ngIf="seleccionada">
+    <div class="modal-content">
+      <span class="close" (click)="cerrarModal()">&times;</span>
+
+      <h2>{{ seleccionada?.nombreMascota }}</h2>
+
+      <img 
+        [src]="seleccionada?.fotoMascota" 
+        [alt]="seleccionada?.nombreMascota" 
+        class="foto-mascota"
+      >
+
+      <p>Fecha solicitud: {{ seleccionada?.fechaSolicitud | date }}</p>
+
+      <p>Experiencia: {{ seleccionada?.experiencia }}</p>
+      <p>Tipo de vivienda: {{ seleccionada?.tipoVivienda }}</p>
+      <p>Comentarios: {{ seleccionada?.comentarios }}</p>
+    </div>
   </div>
 </div>

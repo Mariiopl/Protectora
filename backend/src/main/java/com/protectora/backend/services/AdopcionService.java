@@ -129,4 +129,10 @@ public class AdopcionService {
         }
     }
 
+    public List<AdopcionDto> getAdopcionesDeUsuario(Usuario usuario) {
+        return adopcionRepository.findByUsuario(usuario)
+                .stream()
+                .map(AdopcionDto::fromEntity)
+                .collect(Collectors.toList());
+    }
 }

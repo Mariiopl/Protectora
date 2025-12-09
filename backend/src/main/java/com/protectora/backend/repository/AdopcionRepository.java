@@ -10,6 +10,7 @@ import com.protectora.backend.dto.AdopcionDto;
 import com.protectora.backend.dto.SolicitudAdopcionDto;
 import com.protectora.backend.model.Adopcion;
 import com.protectora.backend.model.Adopcion.Estado;
+import com.protectora.backend.model.Usuario;
 
 @Repository
 public interface AdopcionRepository extends JpaRepository<Adopcion, Integer> {
@@ -40,4 +41,5 @@ public interface AdopcionRepository extends JpaRepository<Adopcion, Integer> {
             """)
     List<AdopcionDto> obtenerPendientes();
 
+    List<Adopcion> findByUsuario(Usuario usuario);
 }

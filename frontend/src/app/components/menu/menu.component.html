@@ -7,11 +7,11 @@
     <ul class="nav-list" [class.open]="menuOpen">
 
       <!-- Sección pública -->
-      <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+      <li *appHasRole="['administrador','adoptante']" routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
         <a routerLink="/catalogo">Adoptados</a>
       </li>
 
-      <li routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
+      <li *appHasRole="['administrador','adoptante']" routerLinkActive="active-item" [routerLinkActiveOptions]="{ exact: true }">
         <a routerLink="/mascotas/en-adopcion"> En adopción</a>
       </li>
      <!-- Sección voluntario -->
@@ -62,7 +62,7 @@
       </li>
 
       <!-- Perfil (por ejemplo, administrador o usuario logueado) -->
-      <li *appHasRole="'ADMIN'" routerLinkActive="active-item">
+      <li  routerLinkActive="active-item">
         <a routerLink="/perfil">Perfil</a>
       </li>
 

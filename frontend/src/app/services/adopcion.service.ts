@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Adopcion } from '../interfaces/adopcion.model';
 
@@ -24,11 +24,15 @@ export class AdopcionService {
     });
   }
 
-  // ⭐ Obtener las adopciones del usuario autenticado
-  getMisAdopciones(): Observable<Adopcion[]> {
-    return this.http.get<Adopcion[]>(`${this.apiUrl}/mis-adopciones`, {
-      headers: this.getAuthHeaders(),
-    });
+  getMisAdopciones(token: string): Observable<Adopcion[]> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http
+      .get<Adopcion[]>(`${this.apiUrl}/mis-adopciones`, { headers })
+      .pipe(catchError(this.handleError));
+  }
+  private handleError(error: any) {
+    console.error('Error AdopcionService', error);
+    return throwError(() => error);
   }
 
   // ⭐ Crear solicitud de adopción
