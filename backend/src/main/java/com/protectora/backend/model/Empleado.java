@@ -63,21 +63,27 @@ public class Empleado {
     private List<TareaAsignada> tareasAsignadas;
 
     public enum Rol {
-        cuidador(1200),
-        limpieza(1000),
-        veterinario(2000),
-        administrador(2500),
-        adopciones(1500),
-        stock(1300);
+        cuidador(1200, "Lunes a Viernes 9:00-17:00"),
+        limpieza(1000, "Lunes a Sábado 8:00-14:00"),
+        veterinario(2000, "Lunes a Viernes 10:00-18:00"),
+        administrador(2500, "Lunes a Viernes 9:00-17:00"),
+        adopciones(1500, "Martes a Sábado 10:00-16:00"),
+        stock(1300, "Lunes a Viernes 8:00-16:00");
 
         private final double salario;
+        private final String horario;
 
-        Rol(double salario) {
+        Rol(double salario, String horario) {
             this.salario = salario;
+            this.horario = horario;
         }
 
         public double getSalario() {
             return salario;
+        }
+
+        public String getHorario() {
+            return horario;
         }
     }
 

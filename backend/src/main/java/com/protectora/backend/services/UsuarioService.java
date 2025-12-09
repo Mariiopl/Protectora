@@ -109,10 +109,12 @@ public class UsuarioService {
             if (dto.getRolEmpleado() != null) {
                 empleado.setRol(dto.getRolEmpleado());
                 empleado.setSalario(dto.getRolEmpleado().getSalario());
+                empleado.setHorario(Empleado.Rol.adopciones.getHorario());
             } else {
                 // Si no se manda rol, asignamos adopciones por defecto
                 empleado.setRol(Empleado.Rol.adopciones);
                 empleado.setSalario(Empleado.Rol.adopciones.getSalario());
+                empleado.setHorario(Empleado.Rol.adopciones.getHorario());
             }
 
             empleadoRepository.save(empleado);
