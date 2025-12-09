@@ -63,6 +63,19 @@
       <option value="empleado">Empleado</option>
       <option value="administrador">Administrador</option>
     </select>
+    <!-- SOLO aparece si el usuario es empleado -->
+<div *ngIf="form.tipoUsuario === 'empleado'">
+  <label>Rol del empleado</label>
+  <select [(ngModel)]="form.rolEmpleado">
+    <option value="cuidador">Cuidador</option>
+    <option value="limpieza">Limpieza</option>
+    <option value="veterinario">Veterinario</option>
+    <option value="administrador">Administrador</option>
+    <option value="adopciones">Adopciones</option>
+    <option value="stock">Stock</option>
+  </select>
+</div>
+
     <div class="modal-actions">
       <button class="guardar" (click)="guardar()">Guardar</button>
       <button class="cancelar" (click)="cerrarModal()">Cancelar</button>

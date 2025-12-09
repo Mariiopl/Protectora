@@ -1,11 +1,18 @@
 package com.protectora.backend.services;
 
 import com.protectora.backend.dto.UsuarioUpdateDto;
+import com.protectora.backend.model.Empleado;
 import com.protectora.backend.model.Usuario;
+import com.protectora.backend.repository.EmpleadoRepository;
 import com.protectora.backend.repository.UsuarioRepository;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,10 +21,13 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmpleadoRepository empleadoRepository;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
+            EmpleadoRepository empleadoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
+        this.empleadoRepository = empleadoRepository;
     }
 
     // Obtener todos los usuarios
@@ -65,11 +75,13 @@ public class UsuarioService {
         return usuarioRepository.findByNombre(nombre);
     }
 
+    @Transactional
     public Usuario updateUsuario(Integer id, UsuarioUpdateDto dto) {
-
+        // 1. Buscar usuario
         Usuario u = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
+        // 2. Actualizar campos básicos
         if (dto.getNombre() != null)
             u.setNombre(dto.getNombre());
         if (dto.getEmail() != null)
@@ -81,7 +93,32 @@ public class UsuarioService {
         if (dto.getTipoUsuario() != null)
             u.setTipoUsuario(dto.getTipoUsuario());
 
-        return usuarioRepository.save(u);
+        Usuario actualizado = usuarioRepository.save(u);
+
+        // 3. Si es empleado, crear o actualizar Empleado
+        if (dto.getTipoUsuario() == Usuario.TipoUsuario.empleado) {
+            Empleado empleado = empleadoRepository.findById(actualizado.getIdUsuario())
+                    .orElseGet(() -> {
+                        Empleado e = new Empleado();
+                        e.setUsuario(actualizado);
+                        e.setFechaAlta(LocalDate.now());
+                        return e;
+                    });
+
+            // 4. Asignar rol desde DTO y calcular salario según rol
+            if (dto.getRolEmpleado() != null) {
+                empleado.setRol(dto.getRolEmpleado());
+                empleado.setSalario(dto.getRolEmpleado().getSalario());
+            } else {
+                // Si no se manda rol, asignamos adopciones por defecto
+                empleado.setRol(Empleado.Rol.adopciones);
+                empleado.setSalario(Empleado.Rol.adopciones.getSalario());
+            }
+
+            empleadoRepository.save(empleado);
+        }
+
+        return actualizado;
     }
 
 }

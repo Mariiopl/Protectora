@@ -63,8 +63,24 @@ public class Empleado {
     private List<TareaAsignada> tareasAsignadas;
 
     public enum Rol {
-        cuidador, limpieza, veterinario, administrador, adopciones, stock
+        cuidador(1200),
+        limpieza(1000),
+        veterinario(2000),
+        administrador(2500),
+        adopciones(1500),
+        stock(1300);
+
+        private final double salario;
+
+        Rol(double salario) {
+            this.salario = salario;
+        }
+
+        public double getSalario() {
+            return salario;
+        }
     }
+
 }
 // {
 // "usuario": {

@@ -1,6 +1,7 @@
 package com.protectora.backend.dto;
 
 import com.protectora.backend.model.Usuario;
+import com.protectora.backend.model.Empleado;
 
 public class UsuarioUpdateDto {
     private String nombre;
@@ -8,7 +9,9 @@ public class UsuarioUpdateDto {
     private String telefono;
     private String direccion;
     private Usuario.TipoUsuario tipoUsuario;
+    private Empleado.Rol rolEmpleado; // <- Nuevo campo
 
+    // Getters y setters
     public String getNombre() {
         return nombre;
     }
@@ -49,4 +52,11 @@ public class UsuarioUpdateDto {
         this.tipoUsuario = tipoUsuario;
     }
 
+    public Empleado.Rol getRolEmpleado() {
+        return rolEmpleado;
+    }
+
+    public void setRolEmpleado(Empleado.Rol rolEmpleado) {
+        this.rolEmpleado = rolEmpleado;
+    }
 }

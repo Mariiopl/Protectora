@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UsuariosService, Usuario } from '../services/usuario.service';
 import Swal from 'sweetalert2';
+import { EmpleadoService } from '../services/empleado.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -16,7 +17,6 @@ export class UsuariosComponent implements OnInit {
 
   modalVisible = false;
   editando = false;
-
   form: any = {
     idUsuario: null,
     nombre: '',
@@ -24,7 +24,7 @@ export class UsuariosComponent implements OnInit {
     telefono: '',
     direccion: '',
     tipoUsuario: 'adoptante',
-    contrasena: '',
+    rolEmpleado: null, // AÑADIR ESTO
   };
 
   constructor(private usuariosService: UsuariosService) {}
@@ -61,33 +61,57 @@ export class UsuariosComponent implements OnInit {
       telefono: usuario.telefono,
       direccion: usuario.direccion,
       tipoUsuario: usuario.tipoUsuario,
+      rolEmpleado: usuario.tipoUsuario === 'empleado' ? 'adopciones' : null, // valor por defecto
     };
+
+    // Solo intentar cargar rol si el usuario ya tiene empleado (opcional)
+    // if (usuario.tipoUsuario === 'empleado') {
+    //   this.empleadoService.getById(usuario.idUsuario!).subscribe({
+    //     next: (emp) => this.form.rolEmpleado = emp.rol,
+    //     error: () => console.log('Empleado no encontrado, se usará rol por defecto')
+    //   });
+    // }
+
     this.modalVisible = true;
   }
 
   guardar() {
     const data = { ...this.form };
 
-    // Si la contraseña está vacía → NO sobrescribir
-    if (!data.contrasena) {
-      delete data.contrasena;
+    // Solo enviar rolEmpleado si es tipo empleado
+    if (data.tipoUsuario !== 'empleado') {
+      delete data.rolEmpleado;
     }
 
     if (this.editando) {
       this.usuariosService.actualizarUsuario(data.idUsuario, data).subscribe({
         next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Usuario actualizado',
+            showConfirmButton: false,
+            timer: 1500,
+          });
           this.cargarUsuarios();
           this.cerrarModal();
         },
-        error: (err) => console.error('Error actualizando usuario', err),
+        error: (err) => {
+          console.error('Error actualizando usuario', err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al actualizar',
+            text: err.error?.message || 'Ocurrió un error inesperado',
+          });
+        },
       });
     } else {
       this.usuariosService.crearUsuario(data).subscribe({
         next: () => {
-          this.cargarUsuarios();
-          this.cerrarModal();
+          /* ... similar ... */
         },
-        error: (err) => console.error('Error creando usuario', err),
+        error: (err) => {
+          /* ... similar ... */
+        },
       });
     }
   }
