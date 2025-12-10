@@ -52,4 +52,9 @@ export class AdopcionService {
       {}
     );
   }
+  getTodasAdopciones(): Observable<Adopcion[]> {
+    return this.http.get<Adopcion[]>(`${this.apiUrl}/todas`, {
+      headers: this.getAuthHeaders(),
+    });
+  }
 }

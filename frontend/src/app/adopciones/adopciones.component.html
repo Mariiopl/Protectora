@@ -3,44 +3,51 @@
 
   <div *ngIf="cargando">Cargando adopciones...</div>
 
-<div class="adopciones-grid" *ngIf="!cargando && (adopciones?.length ?? 0) > 0">
+  <div *ngIf="!cargando && adopciones.length > 0" class="adopciones-grid">
     <div class="adopcion-card" *ngFor="let a of adopciones">
-      <img 
-        [src]="a?.fotoMascota" 
-        [alt]="a?.nombreMascota" 
-        class="foto-mascota"
-      >
-
-      <h3>{{ a?.nombreMascota }}</h3>
-
-      <p>Fecha solicitud: {{ a?.fechaSolicitud | date }}</p>
-
+      <img [src]="a.fotoMascota" [alt]="a.nombreMascota" class="foto-mascota">
+      <h3>{{ a.nombreMascota }}</h3>
+      <p>Fecha solicitud: {{ a.fechaSolicitud | date }}</p>
       <button (click)="verAdopcion(a)">Ver detalles</button>
     </div>
   </div>
 
-  <div *ngIf="!cargando && adopciones?.length === 0">
+  <div *ngIf="!cargando && adopciones.length === 0">
     <p>No tienes adopciones registradas.</p>
   </div>
 
-  <!-- Modal -->
+  <!-- Modal de detalles -->
   <div class="modal" *ngIf="seleccionada">
     <div class="modal-content">
       <span class="close" (click)="cerrarModal()">&times;</span>
 
-      <h2>{{ seleccionada?.nombreMascota }}</h2>
+      <h2>{{ seleccionada.nombreMascota }}</h2>
+      <img [src]="seleccionada.fotoMascota" [alt]="seleccionada.nombreMascota" class="foto-mascota">
+      <p>Fecha solicitud: {{ seleccionada.fechaSolicitud | date }}</p>
+      <p>Experiencia: {{ seleccionada.experiencia }}</p>
+      <p>Tipo de vivienda: {{ seleccionada.tipoVivienda }}</p>
+      <p>Comentarios: {{ seleccionada.comentarios }}</p>
 
-      <img 
-        [src]="seleccionada?.fotoMascota" 
-        [alt]="seleccionada?.nombreMascota" 
-        class="foto-mascota"
-      >
+      <hr>
+      <h3>Seguimientos</h3>
 
-      <p>Fecha solicitud: {{ seleccionada?.fechaSolicitud | date }}</p>
+      <div *ngIf="seguimientos.length === 0">
+        <p>No hay seguimientos asignados.</p>
+      </div>
 
-      <p>Experiencia: {{ seleccionada?.experiencia }}</p>
-      <p>Tipo de vivienda: {{ seleccionada?.tipoVivienda }}</p>
-      <p>Comentarios: {{ seleccionada?.comentarios }}</p>
+      <ng-container *ngFor="let s of seguimientos">
+        <div class="seguimiento-card" *ngIf="s.estado === 'pendiente'">
+          <p><strong>Fecha programada:</strong> {{ s.fechaProgramada | date }}</p>
+
+          <label>Mensaje:</label>
+          <textarea [ngModel]="s.mensaje" disabled></textarea>
+
+          <label>Subir imagen:</label>
+          <input type="file" accept="image/*" (change)="onFileSelect($event, s)">
+
+          <button (click)="marcarCompletado(s)">Marcar como completado</button>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

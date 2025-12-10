@@ -30,4 +30,12 @@ export class CompraService {
   deleteCompra(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  comprar(c: Compra): Observable<Compra> {
+    return this.http.post<Compra>(this.apiUrl, c);
+  }
+  listarPorProducto(idProducto: number): Observable<Compra[]> {
+    return this.http.get<Compra[]>(`${this.apiUrl}/producto/${idProducto}`);
+  }
 }
+export { Compra };

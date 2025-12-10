@@ -1,7 +1,6 @@
 package com.protectora.backend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -10,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Seguimientos")
@@ -24,13 +24,17 @@ public class Seguimiento {
     @Column(name = "id_seguimiento")
     private Integer idSeguimiento;
 
-    @ManyToOne
-    @JoinColumn(name = "id_adopcion")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_adopcion", nullable = false)
     @NotNull(message = "La adopción es obligatoria")
     private Adopcion adopcion;
 
-    @NotNull(message = "La fecha es obligatoria")
-    private LocalDate fecha;
+    @NotNull(message = "La fecha programada es obligatoria")
+    @Column(name = "fecha_programada")
+    private LocalDate fechaProgramada;
+
+    @Column(name = "fecha_realizada")
+    private LocalDateTime fechaRealizada;
 
     @Size(max = 500, message = "El mensaje no puede superar los 500 caracteres")
     private String mensaje;
@@ -39,30 +43,11 @@ public class Seguimiento {
     @Column(name = "url_imagen")
     private String urlImagen;
 
-    @Size(max = 255, message = "La URL del video no puede superar los 255 caracteres")
-    @Column(name = "url_video")
-    private String urlVideo;
-
-    @NotNull(message = "El tipo de seguimiento es obligatorio")
+    @NotNull
     @Enumerated(EnumType.STRING)
-    private Tipo tipo;
+    private Estado estado = Estado.pendiente;
 
-    @Size(max = 255, message = "El enlace de videollamada no puede superar los 255 caracteres")
-    @Column(name = "enlace_videollamada")
-    private String enlaceVideollamada;
-
-    public enum Tipo {
-        texto, foto, video, videollamada
+    public enum Estado {
+        pendiente, completado
     }
 }
-// {
-// "adopcion": {
-// "idAdopcion": 1
-// },
-// "fecha": "2025-09-19",
-// "mensaje": "El perro ha progresado mucho en su socialización.",
-// "urlImagen": "https://example.com/fotos/progreso.jpg",
-// "urlVideo": "https://example.com/videos/progreso.mp4",
-// "tipo": "foto",
-// "enlaceVideollamada": ""
-// }

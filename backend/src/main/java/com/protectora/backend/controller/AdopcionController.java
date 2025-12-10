@@ -131,4 +131,8 @@ public class AdopcionController {
         adopcionService.cambiarEstado(id, Adopcion.Estado.valueOf(nuevoEstado));
     }
 
+    @GetMapping("/todas")
+    public ResponseEntity<List<AdopcionDto>> getTodasAdopciones() {
+        return ResponseEntity.ok(adopcionService.getTodasAdopciones());
+    }
 }

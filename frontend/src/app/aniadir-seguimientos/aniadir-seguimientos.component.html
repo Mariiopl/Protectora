@@ -1,0 +1,43 @@
+<!-- aniadir-seguimientos.component.html -->
+<div class="container">
+  <h2>Administración de Adopciones</h2>
+
+  <div *ngIf="cargando">Cargando adopciones...</div>
+
+  <table *ngIf="!cargando && adopciones.length > 0">
+    <tr>
+      <th>Mascota</th>
+      <th>Usuario</th>
+      <th>Fecha solicitud</th>
+      <th>Acciones</th>
+    </tr>
+    <tr *ngFor="let a of adopciones">
+      <td>{{ a.nombreMascota }}</td>
+      <td>{{ a.nombreUsuario }}</td>
+      <td>{{ a.fechaSolicitud | date }}</td>
+      <td>
+        <button (click)="verAdopcion(a)">Añadir seguimiento</button>
+      </td>
+    </tr>
+  </table>
+
+  <div *ngIf="!cargando && adopciones?.length === 0">
+    <p>No hay adopciones registradas.</p>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" *ngIf="seleccionada">
+    <div class="modal-content">
+      <span class="close" (click)="cerrarModal()">&times;</span>
+
+      <h2>{{ seleccionada?.nombreMascota }} - {{ seleccionada?.nombreUsuario }}</h2>
+
+      <h4>Nuevo seguimiento (foto)</h4>
+
+      <label>Mensaje (opcional):</label>
+      <textarea [(ngModel)]="mensajeSeguimiento"></textarea>
+
+      <button (click)="agregarSeguimiento()">Crear seguimiento</button>
+    </div>
+  </div>
+</div>

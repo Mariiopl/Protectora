@@ -1,49 +1,42 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Seguimiento } from '../interfaces/seguimiento.model';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+export interface Seguimiento {
+  idSeguimiento?: number;
+  idAdopcion: number;
+  fechaProgramada: string;
+  fechaRealizada?: string;
+  mensaje?: string;
+  urlImagen?: string; // foto subida
+  tipo: 'foto'; // solo fotos
+  estado?: 'pendiente' | 'completado';
+}
+
+@Injectable({
+  providedIn: 'root',
+})
 export class SeguimientoService {
-  private apiUrl = 'http://localhost:8080/api/seguimientos';
+  private baseUrl = 'http://localhost:8080/api/seguimientos';
 
   constructor(private http: HttpClient) {}
 
-  getAllSeguimientos(): Observable<Seguimiento[]> {
-    return this.http
-      .get<Seguimiento[]>(this.apiUrl)
-      .pipe(catchError(this.handleError));
+  getPorAdopcion(idAdopcion: number): Observable<Seguimiento[]> {
+    return this.http.get<Seguimiento[]>(
+      `${this.baseUrl}/adopcion/${idAdopcion}`
+    );
   }
 
-  getSeguimientoById(id: number): Observable<Seguimiento> {
-    return this.http
-      .get<Seguimiento>(`${this.apiUrl}/${id}`)
-      .pipe(catchError(this.handleError));
+  crearSeguimiento(seguimiento: Seguimiento): Observable<Seguimiento> {
+    return this.http.post<Seguimiento>(this.baseUrl, seguimiento);
   }
 
-  createSeguimiento(seguimiento: Seguimiento): Observable<Seguimiento> {
-    return this.http
-      .post<Seguimiento>(this.apiUrl, seguimiento)
-      .pipe(catchError(this.handleError));
+  marcarCompletado(idSeguimiento: number): Observable<void> {
+    return this.http.patch<void>(`${this.baseUrl}/${idSeguimiento}`, {
+      estado: 'completado',
+    });
   }
-
-  updateSeguimiento(
-    id: number,
-    seguimiento: Seguimiento
-  ): Observable<Seguimiento> {
-    return this.http
-      .put<Seguimiento>(`${this.apiUrl}/${id}`, seguimiento)
-      .pipe(catchError(this.handleError));
-  }
-
-  deleteSeguimiento(id: number): Observable<void> {
-    return this.http
-      .delete<void>(`${this.apiUrl}/${id}`)
-      .pipe(catchError(this.handleError));
-  }
-
-  private handleError(error: any) {
-    console.error('Error SeguimientoService', error);
-    return throwError(() => error);
+  subirArchivo(id: number, formData: FormData): Observable<any> {
+    return this.http.post(`${this.baseUrl}/${id}/foto`, formData);
   }
 }

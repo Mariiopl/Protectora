@@ -135,4 +135,12 @@ public class AdopcionService {
                 .map(AdopcionDto::fromEntity)
                 .collect(Collectors.toList());
     }
+
+    public List<AdopcionDto> getTodasAdopciones() {
+        return adopcionRepository.findAll()
+                .stream()
+                .map(AdopcionDto::fromEntity)
+                .toList();
+    }
+
 }

@@ -9,12 +9,14 @@ import { PerfilComponent } from './perfil/perfil.component';
 import { TareasComponent } from './tareas/tareas.component';
 import { TurnosComponent } from './turnos/turnos.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
-import { CompraListComponent } from './inventario/compra-list/compra-list.component';
-import { CompraFormComponent } from './inventario/compra-form/compra-form.component';
+// import { CompraListComponent } from './inventario/compra-list/compra-list.component';
+// import { CompraFormComponent } from './inventario/compra-form/compra-form.component';
 import { MascotasAdoptablesComponent } from './mascotas-adoptables/mascotas-adoptables.component';
 import { DonacionesComponent } from './donaciones/donaciones.component';
 import { VeterinarioTratamientosComponent } from './components/veterinario-tratamientos/veterinario-tratamientos.component';
 import { SolicitudesAdopcionesComponent } from './components/solicitudes-adopciones/solicitudes-adopciones.component';
+import { AniadirSeguimientosComponent } from './aniadir-seguimientos/aniadir-seguimientos.component';
+import { ProductosComponent } from './productos/productos.component';
 
 export const appRoutes: Routes = [
   { path: '', redirectTo: '/register', pathMatch: 'full' },
@@ -56,16 +58,26 @@ export const appRoutes: Routes = [
   { path: 'tareas', component: TareasComponent, canActivate: [AuthGuard] },
   { path: 'turnos', component: TurnosComponent, canActivate: [AuthGuard] },
   { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
+  {
+    path: 'productos',
+    component: ProductosComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'aniadir-seguimientos',
+    component: AniadirSeguimientosComponent,
+    canActivate: [AuthGuard],
+  },
 
-  // RUTAS DE INVENTARIO
-  {
-    path: 'inventario/compras',
-    component: CompraListComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'inventario/compras/nuevo',
-    component: CompraFormComponent,
-    canActivate: [AuthGuard],
-  },
+  // // RUTAS DE INVENTARIO
+  // {
+  //   path: 'inventario/compras',
+  //   component: CompraListComponent,
+  //   canActivate: [AuthGuard],
+  // },
+  // {
+  //   path: 'inventario/compras/nuevo',
+  //   component: CompraFormComponent,
+  //   canActivate: [AuthGuard],
+  // },
 ];

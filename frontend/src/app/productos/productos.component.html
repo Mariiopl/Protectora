@@ -1,0 +1,23 @@
+<h2>Productos</h2>
+<div>
+  <input placeholder="Nombre" [(ngModel)]="nuevoProducto.nombre">
+  <select [(ngModel)]="nuevoProducto.categoria">
+    <option *ngFor="let c of ['comida','medicamento','limpieza','juguetes','otros']" [value]="c">{{c}}</option>
+  </select>
+  <input type="number" placeholder="Cantidad" [(ngModel)]="nuevoProducto.cantidad">
+  <input placeholder="Unidad" [(ngModel)]="nuevoProducto.unidad">
+  <input type="number" placeholder="Stock mínimo" [(ngModel)]="nuevoProducto.stockMinimo">
+  <button (click)="agregarProducto()">Agregar Producto</button>
+</div>
+
+<hr>
+
+<div *ngFor="let p of productos" class="producto-card">
+  <h3>{{p.nombre}} ({{p.categoria}})</h3>
+  <p>Cantidad: {{p.cantidad}} {{p.unidad}}</p>
+  <p>Stock mínimo: {{p.stockMinimo}}</p>
+  <input type="number" placeholder="Cantidad a comprar" [(ngModel)]="compra.cantidad">
+  <input placeholder="Proveedor" [(ngModel)]="compra.proveedor">
+  <input type="number" placeholder="Costo total" [(ngModel)]="compra.costoTotal">
+  <button (click)="comprar(p)">Comprar</button>
+</div>
