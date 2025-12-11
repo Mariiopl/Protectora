@@ -110,6 +110,10 @@ public class AdopcionService {
 
         // Cambiar estado de la adopción
         adopcion.setEstado(nuevoEstado);
+        // CUANDO SEA ACEPTADA, GUARDAR FECHA DE ADOPCIÓN
+        if (nuevoEstado == Estado.aceptada) {
+            adopcion.setFechaAdopcion(LocalDate.now());
+        }
         adopcionRepository.save(adopcion);
 
         // Cambiar estado de la mascota asociada
@@ -138,6 +142,13 @@ public class AdopcionService {
 
     public List<AdopcionDto> getTodasAdopciones() {
         return adopcionRepository.findAll()
+                .stream()
+                .map(AdopcionDto::fromEntity)
+                .toList();
+    }
+
+    public List<AdopcionDto> obtenerAceptadas() {
+        return adopcionRepository.findByEstado(Estado.aceptada)
                 .stream()
                 .map(AdopcionDto::fromEntity)
                 .toList();

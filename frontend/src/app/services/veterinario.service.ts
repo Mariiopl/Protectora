@@ -3,31 +3,46 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Tratamiento, TratamientoDTO } from '../interfaces/tratamiento.model';
 
+export interface Mascota {
+  idMascota: number;
+  nombre: string;
+  foto?: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class VeterinarioService {
-  private apiUrl = 'http://localhost:8080/api/tratamientos';
+  private baseUrl = 'http://localhost:8080/api';
 
   constructor(private http: HttpClient) {}
 
   getTratamientos(): Observable<Tratamiento[]> {
-    return this.http.get<Tratamiento[]>(`${this.apiUrl}`);
+    return this.http.get<Tratamiento[]>(`${this.baseUrl}/tratamientos`);
   }
 
-  createTratamiento(dto: TratamientoDTO): Observable<Tratamiento> {
-    return this.http.post<Tratamiento>(`${this.apiUrl}`, dto);
+  createTratamiento(dto: TratamientoDTO) {
+    return this.http.post<Tratamiento>(`${this.baseUrl}/tratamientos`, dto);
   }
 
-  getTratamientoById(id: number): Observable<Tratamiento> {
-    return this.http.get<Tratamiento>(`${this.apiUrl}/${id}`);
+  getMascotasAdoptadas(): Observable<Mascota[]> {
+    return this.http.get<Mascota[]>(`${this.baseUrl}/mascotas/adoptadas`);
   }
-
-  updateTratamiento(id: number, dto: TratamientoDTO): Observable<Tratamiento> {
-    return this.http.put<Tratamiento>(`${this.apiUrl}/${id}`, dto);
+  getTratamientosPorMascota(idMascota: number): Observable<Tratamiento[]> {
+    return this.http.get<Tratamiento[]>(
+      `${this.baseUrl}/tratamientos/mascota/${idMascota}`
+    );
   }
-
-  deleteTratamiento(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  marcarInformado(id: number) {
+    return this.http.put<Tratamiento>(
+      `${this.baseUrl}/tratamientos/${id}/informado`,
+      {}
+    );
+  }
+  marcarRealizado(id: number) {
+    return this.http.put<Tratamiento>(
+      `${this.baseUrl}/tratamientos/${id}/realizado`,
+      {}
+    );
   }
 }

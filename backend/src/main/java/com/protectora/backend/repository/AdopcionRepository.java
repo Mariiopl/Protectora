@@ -42,4 +42,8 @@ public interface AdopcionRepository extends JpaRepository<Adopcion, Integer> {
     List<AdopcionDto> obtenerPendientes();
 
     List<Adopcion> findByUsuario(Usuario usuario);
+
+    @Query("SELECT a FROM Adopcion a WHERE a.estado = 'aceptada'")
+    List<Adopcion> findAceptadas();
+
 }

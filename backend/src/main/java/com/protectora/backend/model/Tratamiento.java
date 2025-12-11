@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "Tratamientos")
 @Data
@@ -27,6 +29,7 @@ public class Tratamiento {
     @ManyToOne
     @JoinColumn(name = "id_mascota")
     @NotNull(message = "La mascota es obligatoria")
+    @JsonIgnoreProperties({ "tratamientos" }) // evita recursión al serializar
     private Mascota mascota;
 
     @NotNull(message = "El tipo de tratamiento es obligatorio")
@@ -35,7 +38,7 @@ public class Tratamiento {
 
     @NotBlank(message = "La descripción es obligatoria")
     @Size(max = 500, message = "La descripción no puede superar los 500 caracteres")
-    @Column(name = "descripción")
+    @Column(name = "descripcion")
     private String descripcion;
 
     @NotNull(message = "La fecha es obligatoria")
@@ -44,20 +47,18 @@ public class Tratamiento {
     @ManyToOne
     @JoinColumn(name = "veterinario")
     @NotNull(message = "El veterinario es obligatorio")
+    @JsonIgnoreProperties({ "tratamientos" }) // evita recursión al serializar
     private Empleado veterinario;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Estado estado = Estado.pendiente; // nuevo campo con valor por defecto
 
     public enum Tipo {
         vacuna, desparasitación, cirugía, otro
     }
+
+    public enum Estado {
+        pendiente, informado, realizado
+    }
 }
-// {
-// "mascota": {
-// "idMascota": 1
-// },
-// "tipo": "vacuna",
-// "descripcion": "Vacuna antirrábica aplicada correctamente.",
-// "fecha": "2025-09-20",
-// "veterinario": {
-// "idEmpleado": 3
-// }
-// }

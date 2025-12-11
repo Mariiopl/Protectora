@@ -4,6 +4,7 @@ export interface TratamientoDTO {
   descripcion: string;
   fecha: string;
   idVeterinario: number;
+  estado?: 'pendiente' | 'informado' | 'realizado'; // opcional, puede venir por defecto
 }
 
 export interface Tratamiento {
@@ -11,11 +12,12 @@ export interface Tratamiento {
   mascota: {
     idMascota: number;
     nombre: string;
-    // agrega lo que necesites
+    foto?: string; // si quieres mostrar la foto
   };
   tipo: string;
   descripcion: string;
   fecha: string;
+  estado: 'pendiente' | 'informado' | 'realizado'; // obligatorio, ya que el backend lo devuelve
   veterinario?: {
     idEmpleado: number;
     nombre: string;

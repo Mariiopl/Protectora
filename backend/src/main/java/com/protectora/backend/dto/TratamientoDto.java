@@ -1,29 +1,41 @@
 package com.protectora.backend.dto;
 
-import com.protectora.backend.model.Tratamiento.Tipo;
-import jakarta.validation.constraints.NotBlank;
+import com.protectora.backend.model.Tratamiento;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-
 import java.time.LocalDate;
 
 public class TratamientoDto {
 
-    @NotNull(message = "La mascota es obligatoria")
+    @NotNull
     private Integer idMascota;
 
-    @NotNull(message = "El tipo de tratamiento es obligatorio")
-    private Tipo tipo;
+    @NotNull
+    private Tratamiento.Tipo tipo;
 
-    @NotBlank(message = "La descripción es obligatoria")
-    @Size(max = 500, message = "La descripción no puede superar los 500 caracteres")
     private String descripcion;
 
-    @NotNull(message = "La fecha es obligatoria")
+    @NotNull
     private LocalDate fecha;
 
-    @NotNull(message = "El veterinario es obligatorio")
+    @NotNull
     private Integer idVeterinario;
+
+    private Tratamiento.Estado estado; // opcional, si no se envía será 'pendiente' por defecto
+
+    // Constructor vacío
+    public TratamientoDto() {
+    }
+
+    // Constructor con todos los campos
+    public TratamientoDto(Integer idMascota, Tratamiento.Tipo tipo, String descripcion,
+            LocalDate fecha, Integer idVeterinario, Tratamiento.Estado estado) {
+        this.idMascota = idMascota;
+        this.tipo = tipo;
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+        this.idVeterinario = idVeterinario;
+        this.estado = estado;
+    }
 
     // Getters y setters
     public Integer getIdMascota() {
@@ -34,11 +46,11 @@ public class TratamientoDto {
         this.idMascota = idMascota;
     }
 
-    public Tipo getTipo() {
+    public Tratamiento.Tipo getTipo() {
         return tipo;
     }
 
-    public void setTipo(Tipo tipo) {
+    public void setTipo(Tratamiento.Tipo tipo) {
         this.tipo = tipo;
     }
 
@@ -64,5 +76,13 @@ public class TratamientoDto {
 
     public void setIdVeterinario(Integer idVeterinario) {
         this.idVeterinario = idVeterinario;
+    }
+
+    public Tratamiento.Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Tratamiento.Estado estado) {
+        this.estado = estado;
     }
 }

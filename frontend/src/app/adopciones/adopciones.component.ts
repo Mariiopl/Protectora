@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { AdopcionService } from '../services/adopcion.service';
 import {
   SeguimientoService,
   Seguimiento,
 } from '../services/seguimiento.service';
+import { VeterinarioService } from '../services/veterinario.service';
 import { Adopcion } from '../interfaces/adopcion.model';
+import { Tratamiento } from '../interfaces/tratamiento.model';
 
 @Component({
   selector: 'app-mis-adopciones',
@@ -22,10 +23,16 @@ export class AdopcionesComponent implements OnInit {
 
   seleccionada: Adopcion | null = null;
   seguimientos: Seguimiento[] = [];
+  tratamientos: Tratamiento[] = [];
+
+  // Arrays filtrados para la vista
+  tratamientosPendientes: Tratamiento[] = [];
+  tratamientosInformados: Tratamiento[] = [];
 
   constructor(
     private adopcionService: AdopcionService,
-    private seguimientoService: SeguimientoService
+    private seguimientoService: SeguimientoService,
+    private veterinarioService: VeterinarioService
   ) {}
 
   ngOnInit(): void {
@@ -49,16 +56,35 @@ export class AdopcionesComponent implements OnInit {
   verAdopcion(adopcion: Adopcion) {
     this.seleccionada = adopcion;
     this.cargarSeguimientos(adopcion.idAdopcion);
+    this.cargarTratamientos(adopcion.idMascota);
   }
 
   cerrarModal() {
     this.seleccionada = null;
     this.seguimientos = [];
+    this.tratamientos = [];
+    this.tratamientosPendientes = [];
+    this.tratamientosInformados = [];
   }
 
   cargarSeguimientos(idAdopcion: number) {
     this.seguimientoService.getPorAdopcion(idAdopcion).subscribe({
       next: (res) => (this.seguimientos = res),
+      error: (err) => console.error(err),
+    });
+  }
+
+  cargarTratamientos(idMascota: number) {
+    this.veterinarioService.getTratamientosPorMascota(idMascota).subscribe({
+      next: (res) => {
+        this.tratamientos = res;
+        this.tratamientosPendientes = res.filter(
+          (t) => t.estado === 'pendiente'
+        );
+        this.tratamientosInformados = res.filter(
+          (t) => t.estado === 'informado'
+        );
+      },
       error: (err) => console.error(err),
     });
   }
@@ -78,7 +104,7 @@ export class AdopcionesComponent implements OnInit {
 
     const file = input.files[0];
     const formData = new FormData();
-    formData.append('file', file); // debe coincidir con @RequestParam("file") del backend
+    formData.append('file', file);
 
     if (!seguimiento.idSeguimiento) return;
 
@@ -88,5 +114,22 @@ export class AdopcionesComponent implements OnInit {
         next: () => console.log('Foto subida correctamente'),
         error: (err) => console.error(err),
       });
+  }
+
+  marcarTratamientoInformado(t: Tratamiento) {
+    if (!t.idTratamiento) return;
+    this.veterinarioService.marcarInformado(t.idTratamiento).subscribe({
+      next: (res) => {
+        t.estado = res.estado;
+        // Actualizar arrays filtrados
+        this.tratamientosPendientes = this.tratamientos.filter(
+          (t) => t.estado === 'pendiente'
+        );
+        this.tratamientosInformados = this.tratamientos.filter(
+          (t) => t.estado === 'informado'
+        );
+      },
+      error: (err) => console.error(err),
+    });
   }
 }

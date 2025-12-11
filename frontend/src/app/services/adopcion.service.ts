@@ -57,4 +57,9 @@ export class AdopcionService {
       headers: this.getAuthHeaders(),
     });
   }
+  getAceptadas(): Observable<Adopcion[]> {
+    return this.http.get<Adopcion[]>(`${this.apiUrl}/aceptadas`, {
+      headers: this.getAuthHeaders(),
+    });
+  }
 }

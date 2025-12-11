@@ -135,4 +135,10 @@ public class AdopcionController {
     public ResponseEntity<List<AdopcionDto>> getTodasAdopciones() {
         return ResponseEntity.ok(adopcionService.getTodasAdopciones());
     }
+
+    @GetMapping("/aceptadas")
+    public ResponseEntity<List<AdopcionDto>> obtenerAceptadas() {
+        return ResponseEntity.ok(adopcionService.obtenerAceptadas());
+    }
+
 }

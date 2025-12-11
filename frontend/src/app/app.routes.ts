@@ -12,7 +12,6 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
 // import { CompraListComponent } from './inventario/compra-list/compra-list.component';
 // import { CompraFormComponent } from './inventario/compra-form/compra-form.component';
 import { MascotasAdoptablesComponent } from './mascotas-adoptables/mascotas-adoptables.component';
-import { DonacionesComponent } from './donaciones/donaciones.component';
 import { VeterinarioTratamientosComponent } from './components/veterinario-tratamientos/veterinario-tratamientos.component';
 import { SolicitudesAdopcionesComponent } from './components/solicitudes-adopciones/solicitudes-adopciones.component';
 import { AniadirSeguimientosComponent } from './aniadir-seguimientos/aniadir-seguimientos.component';
@@ -42,11 +41,6 @@ export const appRoutes: Routes = [
   {
     path: 'veterinario-tratamientos',
     component: VeterinarioTratamientosComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'donacion',
-    component: DonacionesComponent,
     canActivate: [AuthGuard],
   },
   {

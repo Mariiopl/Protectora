@@ -1,99 +1,187 @@
+.mascotas-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.mascota-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+  padding: 10px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.mascota-item img {
+  width: 80px;
+  height: 80px; 
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.mascota-item span {
+  margin-top: 5px;
+  text-align: center;
+}
+
+.mascota-item:hover {
+  border-color: #007bff;
+}
+
+.mascota-item.seleccionada {
+  border-color: #28a745;
+  background-color: #e6ffe6;
+}
 /* Contenedor principal */
 .container {
   max-width: 900px;
-  margin: auto;
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.08);
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
 /* Títulos */
 .titulo {
   text-align: center;
-  color: #4CAF50;
-  font-weight: 700;
   margin-bottom: 20px;
+  color: #333;
 }
 
 .subtitulo {
-  color: #388E3C;
-  margin-top: 25px;
+  margin-top: 30px;
   margin-bottom: 10px;
-  font-weight: 600;
+  color: #555;
 }
 
 /* Formulario */
 .formulario {
-  background: #f7fdf7;
-  padding: 20px;
+  background-color: #f9f9f9;
+  padding: 15px;
   border-radius: 10px;
-  border-left: 5px solid #4CAF50;
   margin-bottom: 30px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
 .form-group {
   margin-bottom: 15px;
 }
 
+.form-group label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
 .form-control {
   width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #cfe5cf;
-  transition: 0.2s;
+  padding: 7px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
-.form-control:focus {
-  border-color: #4CAF50;
-  box-shadow: 0 0 4px rgba(76, 175, 80, 0.4);
+textarea.form-control {
+  resize: vertical;
 }
 
-/* Botón principal */
 .btn-main {
-  background: #4CAF50;
+  background-color: #007bff;
   color: white;
   border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
+  padding: 8px 15px;
+  border-radius: 5px;
   cursor: pointer;
-  font-weight: 600;
   transition: 0.2s;
 }
 
 .btn-main:hover {
-  background: #43a047;
+  background-color: #0056b3;
 }
 
-/* Error */
 .error {
+  color: red;
   margin-top: 10px;
-  color: #e53935;
-  font-weight: 600;
 }
 
-/* Tabla */
+/* Lista de mascotas adoptadas */
+.mascotas-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.mascota-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+  padding: 10px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  background-color: #fff;
+}
+
+.mascota-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 5px;
+}
+
+.mascota-item span {
+  text-align: center;
+  font-weight: bold;
+  color: #333;
+}
+
+.mascota-item:hover {
+  border-color: #007bff;
+}
+
+.mascota-item.seleccionada {
+  border-color: #28a745;
+  background-color: #e6ffe6;
+}
+
+/* Tabla de tratamientos */
 .table-custom {
   width: 100%;
   border-collapse: collapse;
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 0 10px rgba(0,0,0,0.05);
 }
 
-.table-custom th {
-  background: #4CAF50;
-  color: white;
-  padding: 12px;
+.table-custom th, .table-custom td {
+  padding: 10px;
+  border: 1px solid #ccc;
   text-align: left;
 }
 
-.table-custom td {
-  padding: 10px;
-  border-bottom: 1px solid #e7e7e7;
+.table-custom th {
+  background-color: #f1f1f1;
+  font-weight: bold;
 }
 
-.table-custom tr:hover {
-  background: #f2fff2;
+.table-custom tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.btn-main {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.btn-main:hover {
+  background-color: #45a049;
 }

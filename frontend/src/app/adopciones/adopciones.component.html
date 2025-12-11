@@ -3,39 +3,40 @@
 
   <div *ngIf="cargando">Cargando adopciones...</div>
 
-  <div *ngIf="!cargando && adopciones.length > 0" class="adopciones-grid">
-    <div class="adopcion-card" *ngFor="let a of adopciones">
-      <img [src]="a.fotoMascota" [alt]="a.nombreMascota" class="foto-mascota">
-      <h3>{{ a.nombreMascota }}</h3>
-      <p>Fecha solicitud: {{ a.fechaSolicitud | date }}</p>
-      <button (click)="verAdopcion(a)">Ver detalles</button>
-    </div>
+<div *ngIf="!cargando && adopciones.length > 0" class="adopciones-grid">
+  <div class="adopcion-card" *ngFor="let a of adopciones">
+    <img [src]="a.fotoMascota ?? 'assets/no-image.jpg'" [alt]="a.nombreMascota" class="foto-mascota">
+    <h3>{{ a.nombreMascota }}</h3>
+    <p>Fecha solicitud: {{ a.fechaSolicitud | date }}</p>
+    <button (click)="verAdopcion(a)">Ver detalles</button>
   </div>
+</div>
 
-  <div *ngIf="!cargando && adopciones.length === 0">
-    <p>No tienes adopciones registradas.</p>
-  </div>
+<div *ngIf="!cargando && adopciones.length === 0">
+  <p>No tienes adopciones registradas.</p>
+</div>
+
 
   <!-- Modal de detalles -->
   <div class="modal" *ngIf="seleccionada">
     <div class="modal-content">
       <span class="close" (click)="cerrarModal()">&times;</span>
 
-      <h2>{{ seleccionada.nombreMascota }}</h2>
-      <img [src]="seleccionada.fotoMascota" [alt]="seleccionada.nombreMascota" class="foto-mascota">
-      <p>Fecha solicitud: {{ seleccionada.fechaSolicitud | date }}</p>
-      <p>Experiencia: {{ seleccionada.experiencia }}</p>
-      <p>Tipo de vivienda: {{ seleccionada.tipoVivienda }}</p>
-      <p>Comentarios: {{ seleccionada.comentarios }}</p>
+      <h2>{{ seleccionada?.nombreMascota }}</h2>
+      <img [src]="seleccionada?.fotoMascota ?? 'assets/no-image.jpg'" [alt]="seleccionada?.nombreMascota" class="foto-mascota">
+      <p>Fecha solicitud: {{ seleccionada?.fechaSolicitud | date }}</p>
+      <p>Experiencia: {{ seleccionada?.experiencia }}</p>
+      <p>Tipo de vivienda: {{ seleccionada?.tipoVivienda }}</p>
+      <p>Comentarios: {{ seleccionada?.comentarios }}</p>
 
       <hr>
       <h3>Seguimientos</h3>
 
-      <div *ngIf="seguimientos.length === 0">
+      <div *ngIf="!seguimientos?.length">
         <p>No hay seguimientos asignados.</p>
       </div>
 
-      <ng-container *ngFor="let s of seguimientos">
+      <ng-container *ngFor="let s of seguimientos ?? []">
         <div class="seguimiento-card" *ngIf="s.estado === 'pendiente'">
           <p><strong>Fecha programada:</strong> {{ s.fechaProgramada | date }}</p>
 
@@ -48,6 +49,43 @@
           <button (click)="marcarCompletado(s)">Marcar como completado</button>
         </div>
       </ng-container>
+
+      <hr>
+<h3>Tratamientos</h3>
+
+<div *ngIf="tratamientos.length === 0">
+  <p>No hay tratamientos asignados a esta mascota.</p>
+</div>
+
+<h3>Tratamientos Pendientes</h3>
+<ul *ngIf="tratamientosPendientes.length > 0">
+  <li *ngFor="let t of tratamientosPendientes" class="tratamiento pendiente">
+    <strong>Tipo:</strong> {{ t.tipo }} |
+    <strong>Descripción:</strong> {{ t.descripcion }} |
+    <strong>Fecha:</strong> {{ t.fecha | date }} |
+    <strong>Estado:</strong> {{ t.estado }}
+    <button (click)="marcarTratamientoInformado(t)">Marcar como informado</button>
+  </li>
+</ul>
+<div *ngIf="tratamientosPendientes.length === 0">
+  <p>No hay tratamientos pendientes.</p>
+</div>
+
+<h3>Tratamientos Informados</h3>
+<ul *ngIf="tratamientosInformados.length > 0">
+  <li *ngFor="let t of tratamientosInformados" class="tratamiento informado">
+    <strong>Tipo:</strong> {{ t.tipo }} |
+    <strong>Descripción:</strong> {{ t.descripcion }} |
+    <strong>Fecha:</strong> {{ t.fecha | date }} |
+    <strong>Estado:</strong> {{ t.estado }}
+  </li>
+</ul>
+<div *ngIf="tratamientosInformados.length === 0">
+  <p>No hay tratamientos informados.</p>
+</div>
+
+
+
     </div>
   </div>
 </div>

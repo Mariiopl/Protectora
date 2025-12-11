@@ -70,9 +70,6 @@ export class CatalogoComponent implements OnInit {
     if (this.fotoSeleccionada) {
       formData.append('foto', this.fotoSeleccionada);
     }
-    // 🔍 AGREGA ESTO AQUÍ
-    console.log('Mascota enviada:', this.mascotaSeleccionada);
-    console.log('FormData:');
     formData.forEach((v, k) => console.log(k, v));
     // ----------------------------------
 

@@ -1,12 +1,28 @@
 <div class="container mt-4">
   <h2 class="titulo">Gestión de Tratamientos - Veterinario</h2>
 
-  <!-- Formulario -->
-  <form [formGroup]="form" (ngSubmit)="crearTratamiento()" class="formulario">
-    <div class="form-group">
-      <label>ID Mascota</label>
-      <input type="number" class="form-control" formControlName="idMascota" />
+  <!-- Selección de mascota adoptada -->
+  <h4>Selecciona una mascota adoptada</h4>
+  <div class="mascotas-list">
+    <div
+      class="mascota-item"
+      *ngFor="let m of mascotasAdoptadas"
+      [class.seleccionada]="m.idMascota === mascotaSeleccionadaId"
+      (click)="seleccionarMascota(m.idMascota)"
+    >
+<img 
+  [src]="m.foto 
+        ? 'http://localhost:8080/api/mascotas/imagenes/' + m.foto 
+        : 'assets/default-mascota.png'"
+  alt="{{ m.nombre }}"
+/>
+
+      <span>{{ m.nombre }}</span>
     </div>
+  </div>
+
+  <!-- Formulario de tratamiento -->
+  <form [formGroup]="form" (ngSubmit)="crearTratamiento()" class="formulario">
 
     <div class="form-group">
       <label>Tipo</label>
@@ -28,42 +44,44 @@
       <input type="date" class="form-control" formControlName="fecha" />
     </div>
 
-    <div class="form-group">
-      <label>ID Veterinario</label>
-      <input type="number" class="form-control" formControlName="idVeterinario" />
-    </div>
-
     <button type="submit" class="btn-main">Crear Tratamiento</button>
-
     <p class="error" *ngIf="mensajeError">{{ mensajeError }}</p>
   </form>
 
-  <!-- Tabla -->
+  <!-- Tabla de tratamientos -->
   <h3 class="subtitulo">Tratamientos registrados</h3>
+<table class="table-custom">
+  <thead>
+    <tr>
+      <th>Nombre Mascota</th>
+      <th>Tipo</th>
+      <th>Descripción</th>
+      <th>Fecha</th>
+      <th>Veterinario</th>
+      <th>Estado</th>
+      <th>Acciones</th> <!-- Nueva columna -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let t of tratamientos">
+      <td>{{ t.mascota.nombre }}</td>
+      <td>{{ t.tipo }}</td>
+      <td>{{ t.descripcion }}</td>
+      <td>{{ t.fecha }}</td>
+      <td>{{ t.veterinario?.nombre }}</td>
+      <td>{{ t.estado }}</td>
+      <td>
+        <!-- Botón que aparece solo si el estado es "informado" -->
+        <button 
+          *ngIf="t.estado === 'informado'" 
+          (click)="marcarTratamientoRealizado(t)"
+          class="btn-main"
+        >
+          Marcar como realizado
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-  <table class="table-custom">
-    <thead>
-      <tr>
-        <!-- <th>ID</th>
-        <th>ID Mascota</th> -->
-        <th>Nombre Mascota</th>
-        <th>Tipo</th>
-        <th>Descripción</th>
-        <th>Fecha</th>
-        <th>Veterinario</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let t of tratamientos">
-        <!-- <td>{{ t.idTratamiento }}</td>
-        <td>{{ t.mascota.idMascota }}</td> -->
-        <td>{{ t.mascota.nombre }}</td>
-        <td>{{ t.tipo }}</td>
-        <td>{{ t.descripcion }}</td>
-        <td>{{ t.fecha }}</td>
-        <td>{{ t.veterinario }}</td>
-      </tr>
-    </tbody>
-  </table>
 </div>

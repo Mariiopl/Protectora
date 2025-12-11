@@ -47,6 +47,7 @@ public class TratamientoService {
                 .descripcion(dto.getDescripcion())
                 .fecha(dto.getFecha())
                 .veterinario(veterinario)
+                .estado(dto.getEstado() != null ? dto.getEstado() : Tratamiento.Estado.pendiente)
                 .build();
 
         return tratamientoRepository.save(tratamiento);
@@ -65,6 +66,7 @@ public class TratamientoService {
                     trat.setDescripcion(dto.getDescripcion());
                     trat.setFecha(dto.getFecha());
                     trat.setVeterinario(veterinario);
+                    trat.setEstado(dto.getEstado() != null ? dto.getEstado() : trat.getEstado());
                     return tratamientoRepository.save(trat);
                 }).orElseThrow(() -> new RuntimeException("Tratamiento no encontrado"));
     }
@@ -72,4 +74,25 @@ public class TratamientoService {
     public void deleteById(Integer id) {
         tratamientoRepository.deleteById(id);
     }
+
+    public List<Tratamiento> findByMascotaId(Integer idMascota) {
+        return tratamientoRepository.findByMascota_IdMascota(idMascota);
+    }
+
+    public Tratamiento marcarInformado(Integer id) {
+        return tratamientoRepository.findById(id)
+                .map(trat -> {
+                    trat.setEstado(Tratamiento.Estado.informado);
+                    return tratamientoRepository.save(trat);
+                }).orElseThrow(() -> new RuntimeException("Tratamiento no encontrado"));
+    }
+
+    public Tratamiento marcarRealizado(Integer id) {
+        return tratamientoRepository.findById(id)
+                .map(trat -> {
+                    trat.setEstado(Tratamiento.Estado.realizado); // usar enum
+                    return tratamientoRepository.save(trat);
+                }).orElseThrow(() -> new RuntimeException("Tratamiento no encontrado"));
+    }
+
 }

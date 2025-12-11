@@ -34,7 +34,7 @@ export class AniadirSeguimientosComponent implements OnInit {
 
   cargarAdopciones() {
     this.cargando = true;
-    this.adopcionService.getTodasAdopciones().subscribe({
+    this.adopcionService.getAceptadas().subscribe({
       next: (res) => {
         this.adopciones = res.map((a) => ({
           ...a,
