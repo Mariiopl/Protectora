@@ -60,13 +60,13 @@
     <div class="modal-form">
 
       <label>Experiencia con animales</label>
-      <textarea [(ngModel)]="adopcion.experiencia"></textarea>
+      <textarea [(ngModel)]="adopcion.experiencia" (keypress)="soloTexto($event)"></textarea>
 
       <label>Tipo de vivienda</label>
-      <input type="text" [(ngModel)]="adopcion.tipoVivienda" />
+      <input type="text" [(ngModel)]="adopcion.tipoVivienda" (keypress)="soloTexto($event)" />
 
       <label>Comentarios</label>
-      <textarea [(ngModel)]="adopcion.comentarios"></textarea>
+      <textarea [(ngModel)]="adopcion.comentarios" (keypress)="soloTexto($event)" ></textarea>
 
       <div class="modal-buttons">
         <button class="btn cancelar" (click)="cerrarModal()">Cancelar</button>

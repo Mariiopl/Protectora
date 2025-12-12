@@ -117,4 +117,11 @@ export class MascotasAdoptablesComponent implements OnInit {
       },
     });
   }
+  soloTexto(event: KeyboardEvent) {
+    const char = event.key;
+    // Si el carácter es un número, evitar que se escriba
+    if (/\d/.test(char)) {
+      event.preventDefault();
+    }
+  }
 }

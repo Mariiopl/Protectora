@@ -57,7 +57,7 @@
       <th>Tipo</th>
       <th>Descripción</th>
       <th>Fecha</th>
-      <th>Veterinario</th>
+      <th>ID Veterinario</th>
       <th>Estado</th>
       <th>Acciones</th> <!-- Nueva columna -->
     </tr>
@@ -68,7 +68,7 @@
       <td>{{ t.tipo }}</td>
       <td>{{ t.descripcion }}</td>
       <td>{{ t.fecha }}</td>
-      <td>{{ t.veterinario?.nombre }}</td>
+      <td>{{ t.veterinario?.idEmpleado }}</td>
       <td>{{ t.estado }}</td>
       <td>
         <!-- Botón que aparece solo si el estado es "informado" -->

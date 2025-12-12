@@ -1,11 +1,9 @@
 package com.protectora.backend.services;
 
 import com.protectora.backend.dto.AdopcionDto;
-import com.protectora.backend.dto.SolicitudAdopcionDto;
 import com.protectora.backend.model.Adopcion;
 import com.protectora.backend.model.Adopcion.Estado;
 import com.protectora.backend.model.Mascota;
-import com.protectora.backend.model.Mascota.EstadoAdopcion;
 import com.protectora.backend.model.Usuario;
 import com.protectora.backend.repository.AdopcionRepository;
 import com.protectora.backend.repository.MascotaRepository;
@@ -16,6 +14,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Servicio para manejar la lógica de negocio relacionada con Adopciones.
+ * Encapsula operaciones como creación, actualización, eliminación y consultas.
+ */
 @Service
 public class AdopcionService {
 
@@ -31,16 +33,28 @@ public class AdopcionService {
         this.mascotaRepository = mascotaRepository;
     }
 
-    // ======================
+    // =================================================
     // CONSULTAS
-    // ======================
+    // =================================================
+
+    /**
+     * Obtiene todas las adopciones y las transforma a DTO.
+     * 
+     * @return Lista de AdopcionDto
+     */
     public List<AdopcionDto> findAllDTO() {
         return adopcionRepository.findAll()
                 .stream()
-                .map(AdopcionDto::fromEntity)
+                .map(AdopcionDto::fromEntity) // Transformación entidad -> DTO
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Obtiene todas las adopciones de un usuario por ID y las transforma a DTO.
+     * 
+     * @param idUsuario ID del usuario
+     * @return Lista de AdopcionDto
+     */
     public List<AdopcionDto> findByUsuarioDTO(Integer idUsuario) {
         return adopcionRepository.findByUsuario_IdUsuario(idUsuario)
                 .stream()
@@ -48,27 +62,47 @@ public class AdopcionService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Obtiene una adopción por su ID.
+     * 
+     * @param id ID de la adopción
+     * @return Objeto Adopcion
+     * @throws RuntimeException si no se encuentra la adopción
+     */
     public Adopcion getById(Integer id) {
         return adopcionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Adopción no encontrada"));
     }
 
-    // ======================
-    // CREACIÓN / ACTUALIZACIÓN
+    // =================================================
+    // CREACIÓN DE ADOPCIÓN
+    // =================================================
+
+    /**
+     * Crea una nueva adopción asociando un usuario y una mascota.
+     * Cambia automáticamente el estado de la mascota a "en_proceso".
+     *
+     * @param idUsuario ID del usuario
+     * @param idMascota ID de la mascota
+     * @param dto       DTO con información adicional
+     * @return La adopción creada
+     */
     public Adopcion create(Integer idUsuario, Integer idMascota, AdopcionDto dto) {
+        // Obtener usuario y mascota
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         Mascota mascota = mascotaRepository.findById(idMascota)
                 .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
 
-        // Cambiamos el estado de la mascota a EN_PROCESO
+        // Cambiar estado de la mascota a "en_proceso"
         mascota.setEstadoAdopcion(Mascota.EstadoAdopcion.en_proceso);
-        mascotaRepository.save(mascota); // Guardamos el cambio
+        mascotaRepository.save(mascota);
 
+        // Crear objeto adopción
         Adopcion adopcion = new Adopcion();
         adopcion.setUsuario(usuario);
         adopcion.setMascota(mascota);
-        adopcion.setEstado(dto.estado() != null ? dto.estado() : Adopcion.Estado.pendiente);
+        adopcion.setEstado(dto.estado() != null ? dto.estado() : Estado.pendiente);
         adopcion.setFechaSolicitud(LocalDate.now());
         adopcion.setFechaAdopcion(dto.fechaAdopcion());
         adopcion.setExperiencia(dto.experiencia());
@@ -78,6 +112,17 @@ public class AdopcionService {
         return adopcionRepository.save(adopcion);
     }
 
+    // =================================================
+    // ACTUALIZACIÓN DE ADOPCIÓN
+    // =================================================
+
+    /**
+     * Actualiza los campos de una adopción existente si se proporcionan en el DTO.
+     * 
+     * @param idAdopcion ID de la adopción
+     * @param dto        DTO con nuevos valores
+     * @return La adopción actualizada
+     */
     public Adopcion update(Integer idAdopcion, AdopcionDto dto) {
         Adopcion adopcion = getById(idAdopcion);
 
@@ -95,44 +140,77 @@ public class AdopcionService {
         return adopcionRepository.save(adopcion);
     }
 
+    // =================================================
+    // ELIMINACIÓN DE ADOPCIÓN
+    // =================================================
+
+    /**
+     * Elimina una adopción por su ID.
+     * 
+     * @param idAdopcion ID de la adopción
+     */
     public void delete(Integer idAdopcion) {
         Adopcion adopcion = getById(idAdopcion);
         adopcionRepository.delete(adopcion);
     }
 
+    // =================================================
+    // MÉTODOS ADICIONALES
+    // =================================================
+
+    /**
+     * Obtiene adopciones pendientes usando la query custom en el repositorio.
+     * 
+     * @return Lista de AdopcionDto pendientes
+     */
     public List<AdopcionDto> obtenerPendientes() {
         return adopcionRepository.obtenerPendientes();
     }
 
-    public void cambiarEstado(Integer idAdopcion, Adopcion.Estado nuevoEstado) {
+    /**
+     * Cambia el estado de una adopción y actualiza también el estado de la mascota
+     * asociada.
+     * Si el estado es 'aceptada', se asigna la fecha de adopción.
+     *
+     * @param idAdopcion  ID de la adopción
+     * @param nuevoEstado Nuevo estado de la adopción
+     */
+    public void cambiarEstado(Integer idAdopcion, Estado nuevoEstado) {
         Adopcion adopcion = adopcionRepository.findById(idAdopcion)
                 .orElseThrow(() -> new RuntimeException("Adopción no encontrada"));
 
         // Cambiar estado de la adopción
         adopcion.setEstado(nuevoEstado);
-        // CUANDO SEA ACEPTADA, GUARDAR FECHA DE ADOPCIÓN
+
+        // Si es aceptada, asignar fecha de adopción
         if (nuevoEstado == Estado.aceptada) {
             adopcion.setFechaAdopcion(LocalDate.now());
         }
         adopcionRepository.save(adopcion);
 
-        // Cambiar estado de la mascota asociada
+        // Actualizar estado de la mascota asociada
         Mascota mascota = adopcion.getMascota();
         if (mascota != null) {
             switch (nuevoEstado) {
-                case aceptada: // o el nombre que uses para "aceptada"
-                    mascota.setEstadoAdopcion(Mascota.EstadoAdopcion.adoptado); // o el enum que tengas
+                case aceptada:
+                    mascota.setEstadoAdopcion(Mascota.EstadoAdopcion.adoptado);
                     break;
-                case rechazada: // si quieres manejar rechazadas
+                case rechazada:
                     mascota.setEstadoAdopcion(Mascota.EstadoAdopcion.adoptable);
                     break;
                 default:
-                    // otros estados si es necesario
+                    // Otros estados si se necesitan
             }
             mascotaRepository.save(mascota);
         }
     }
 
+    /**
+     * Obtiene todas las adopciones de un usuario específico.
+     * 
+     * @param usuario Objeto usuario
+     * @return Lista de AdopcionDto
+     */
     public List<AdopcionDto> getAdopcionesDeUsuario(Usuario usuario) {
         return adopcionRepository.findByUsuario(usuario)
                 .stream()
@@ -140,6 +218,11 @@ public class AdopcionService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Obtiene todas las adopciones existentes.
+     * 
+     * @return Lista de AdopcionDto
+     */
     public List<AdopcionDto> getTodasAdopciones() {
         return adopcionRepository.findAll()
                 .stream()
@@ -147,11 +230,15 @@ public class AdopcionService {
                 .toList();
     }
 
+    /**
+     * Obtiene todas las adopciones cuyo estado es 'aceptada'.
+     * 
+     * @return Lista de AdopcionDto aceptadas
+     */
     public List<AdopcionDto> obtenerAceptadas() {
         return adopcionRepository.findByEstado(Estado.aceptada)
                 .stream()
                 .map(AdopcionDto::fromEntity)
                 .toList();
     }
-
 }

@@ -10,8 +10,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión de usuarios.
+ * Permite crear, listar, actualizar y eliminar usuarios.
+ */
 @RestController
 @RequestMapping("/api/usuarios")
+@CrossOrigin(origins = "http://localhost:4200") // Permitimos llamadas desde Angular
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -20,13 +25,17 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    // Obtener todos los usuarios
+    // =================================================
+    // LISTAR TODOS LOS USUARIOS
+    // =================================================
     @GetMapping
     public List<Usuario> getAllUsuarios() {
         return usuarioService.findAll();
     }
 
-    // Obtener usuario por ID
+    // =================================================
+    // OBTENER USUARIO POR ID
+    // =================================================
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> getUsuarioById(@PathVariable Integer id) {
         return usuarioService.findById(id)
@@ -34,14 +43,32 @@ public class UsuarioController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Crear nuevo usuario con validación
+    // =================================================
+    // CREAR NUEVO USUARIO
+    // =================================================
+    /**
+     * Crea un nuevo usuario en la base de datos.
+     * 
+     * @param usuario Objeto Usuario recibido desde el body
+     * @return Usuario creado con código HTTP 201
+     */
     @PostMapping
     public ResponseEntity<Usuario> createUsuario(@Valid @RequestBody Usuario usuario) {
         Usuario saved = usuarioService.save(usuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    // Actualizar usuario existente
+    // =================================================
+    // ACTUALIZAR USUARIO EXISTENTE
+    // =================================================
+    /**
+     * Actualiza un usuario existente usando DTO para modificar solo los campos
+     * permitidos.
+     * 
+     * @param id  ID del usuario a actualizar
+     * @param dto DTO con los campos a actualizar
+     * @return Usuario actualizado
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> updateUsuario(
             @PathVariable Integer id,
@@ -50,7 +77,15 @@ public class UsuarioController {
         return ResponseEntity.ok(actualizado);
     }
 
-    // Eliminar usuario
+    // =================================================
+    // ELIMINAR USUARIO
+    // =================================================
+    /**
+     * Elimina un usuario por su ID.
+     * 
+     * @param id ID del usuario a eliminar
+     * @return 204 No Content si se eliminó correctamente, 404 si no existe
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUsuario(@PathVariable Integer id) {
         if (usuarioService.findById(id).isPresent()) {

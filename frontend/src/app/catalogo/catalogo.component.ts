@@ -135,4 +135,11 @@ export class CatalogoComponent implements OnInit {
   subirFoto(event: any) {
     this.fotoSeleccionada = event.target.files[0];
   }
+  soloTexto(event: KeyboardEvent) {
+    const char = event.key;
+    // Si el carácter es un número, evitar que se escriba
+    if (/\d/.test(char)) {
+      event.preventDefault();
+    }
+  }
 }

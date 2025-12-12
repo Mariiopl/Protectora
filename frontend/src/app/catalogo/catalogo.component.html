@@ -74,13 +74,13 @@
       <div class="form-grid">
 
         <label>Nombre</label>
-        <input type="text" [(ngModel)]="mascotaSeleccionada.nombre" name="nombre"/>
+        <input type="text" [(ngModel)]="mascotaSeleccionada.nombre" name="nombre" (keypress)="soloTexto($event)"/>
 
         <label>Especie</label>
-        <input type="text" [(ngModel)]="mascotaSeleccionada.especie" name="especie"/>
+        <input type="text" [(ngModel)]="mascotaSeleccionada.especie" name="especie" (keypress)="soloTexto($event)"/>
 
         <label>Raza</label>
-        <input type="text" [(ngModel)]="mascotaSeleccionada.raza" name="raza"/>
+        <input type="text" [(ngModel)]="mascotaSeleccionada.raza" name="raza" (keypress)="soloTexto($event)"/>
 
         <label>Edad</label>
         <input type="number" [(ngModel)]="mascotaSeleccionada.edad" name="edad"/>
@@ -99,16 +99,16 @@
         </select>
 
         <label>Carácter</label>
-        <input type="text" [(ngModel)]="mascotaSeleccionada.caracter" name="caracter"/>
+        <input type="text" [(ngModel)]="mascotaSeleccionada.caracter" name="caracter" (keypress)="soloTexto($event)"/>
 
         <label>Necesidades especiales</label>
         <textarea [(ngModel)]="mascotaSeleccionada.necesidadesEspeciales" name="necesidadesEspeciales"></textarea>
 
         <label>Historia</label>
-        <textarea [(ngModel)]="mascotaSeleccionada.historia" name="historia"></textarea>
+        <textarea [(ngModel)]="mascotaSeleccionada.historia" name="historia"(keypress)="soloTexto($event)"></textarea>
 
         <label>Ubicación</label>
-        <input type="text" [(ngModel)]="mascotaSeleccionada.ubicacion" name="ubicacion"/>
+        <input type="text" [(ngModel)]="mascotaSeleccionada.ubicacion" name="ubicacion"(keypress)="soloTexto($event)"/>
 
         <!-- Solo mostrar al editar -->
         <label *ngIf="mascotaSeleccionada?.idMascota">Fecha de ingreso</label>
