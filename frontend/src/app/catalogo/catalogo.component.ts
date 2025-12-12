@@ -5,6 +5,7 @@ import { MascotaService } from '../services/mascota.service';
 import { Mascota } from '../interfaces/mascota.model';
 import { HasRoleDirective } from '../directives/has-role.directive';
 import Swal from 'sweetalert2';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-catalogo',
@@ -20,7 +21,10 @@ export class CatalogoComponent implements OnInit {
   mascotaSeleccionada: any = null;
   fotoSeleccionada: File | null = null;
 
-  constructor(private mascotaService: MascotaService) {}
+  constructor(
+    private mascotaService: MascotaService,
+    public authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.cargarMascotas();

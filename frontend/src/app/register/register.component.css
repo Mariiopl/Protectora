@@ -6,7 +6,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  background: linear-gradient(135deg, #FFDDD2 0%, #FFAAA5 100%);
   font-family: Arial, sans-serif;
 }
 
@@ -16,7 +16,7 @@
   background: #fff;
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
   width: 100%;
   max-width: 400px;
   text-align: center;
@@ -36,7 +36,7 @@
   width: 100%;
   padding: 12px;
   margin: 0.5rem 0;
-  border: 1px solid #ddd;
+  border: 1px solid #FFAAA5;
   border-radius: 8px;
   font-size: 1rem;
   transition: border 0.3s;
@@ -45,7 +45,7 @@
 .login-container input:focus,
 .register-container input:focus,
 .register-container select:focus {
-  border-color: #2575fc;
+  border-color: #FF6B6B;
   outline: none;
 }
 
@@ -55,7 +55,7 @@
   width: 100%;
   padding: 12px;
   margin-top: 1rem;
-  background: #2575fc;
+  background: #FF6B6B;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -66,7 +66,7 @@
 
 .login-container button:hover,
 .register-container button:hover {
-  background: #1a5ed9;
+  background: #FF4C4C;
 }
 
 /* Links */
@@ -78,7 +78,7 @@
 
 .login-container a,
 .register-container a {
-  color: #2575fc;
+  color: #FF6B6B;
   text-decoration: none;
   font-weight: bold;
 }

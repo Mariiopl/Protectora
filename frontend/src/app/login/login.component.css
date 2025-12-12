@@ -6,8 +6,9 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  background: linear-gradient(135deg, #FFDDD2 0%, #FFAAA5 100%);
   font-family: Arial, sans-serif;
+  transition: background 0.5s;
 }
 
 /* Tarjeta */
@@ -15,11 +16,18 @@
 .register-container form {
   background: #fff;
   padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
   width: 100%;
   max-width: 400px;
   text-align: center;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.login-container form:hover,
+.register-container form:hover {
+  box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px);
 }
 
 /* Título */
@@ -27,6 +35,7 @@
 .register-container h2 {
   margin-bottom: 1.5rem;
   color: #333;
+  font-weight: bold;
 }
 
 /* Inputs */
@@ -34,18 +43,19 @@
 .register-container input,
 .register-container select {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   margin: 0.5rem 0;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border: 1px solid #FFAAA5;
+  border-radius: 12px;
   font-size: 1rem;
-  transition: border 0.3s;
+  transition: border 0.3s, box-shadow 0.3s;
 }
 
 .login-container input:focus,
 .register-container input:focus,
 .register-container select:focus {
-  border-color: #2575fc;
+  border-color: #FF6B6B;
+  box-shadow: 0 0 8px rgba(255, 107, 107, 0.3);
   outline: none;
 }
 
@@ -53,20 +63,24 @@
 .login-container button,
 .register-container button {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   margin-top: 1rem;
-  background: #2575fc;
+  background: #FF6B6B;
   color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .login-container button:hover,
 .register-container button:hover {
-  background: #1a5ed9;
+  background: #FF4C4C;
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Links */
@@ -74,17 +88,20 @@
 .register-container p {
   margin-top: 1rem;
   font-size: 0.9rem;
+  color: #555;
 }
 
 .login-container a,
 .register-container a {
-  color: #2575fc;
+  color: #FF6B6B;
   text-decoration: none;
   font-weight: bold;
+  transition: color 0.3s;
 }
 
 .login-container a:hover,
 .register-container a:hover {
+  color: #FF4C4C;
   text-decoration: underline;
 }
 

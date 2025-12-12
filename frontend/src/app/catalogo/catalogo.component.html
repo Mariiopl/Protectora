@@ -1,7 +1,7 @@
 <div class="catalogo-container">
   <h2>🐾  Mascotas Adoptadas</h2>
 
-  <button class="btn add" (click)="nuevaMascota()">
+  <button *appHasRole="'administrador'" class="btn add" (click)="nuevaMascota()">
     + Añadir Mascota
   </button>
 
@@ -41,11 +41,11 @@
           {{ mascota.mostrarDetalles ? 'Ver menos' : 'Ver más' }}
         </button>
 
-        <button class="btn edit" (click)="abrirModal(mascota)">
+        <button *appHasRole="'administrador'" class="btn edit" (click)="abrirModal(mascota)">
           Editar
         </button>
 
-        <button class="btn delete" (click)="eliminarMascota(mascota)">
+        <button *appHasRole="'administrador'" class="btn delete" (click)="eliminarMascota(mascota)">
           Eliminar
         </button>
       </div>

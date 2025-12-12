@@ -11,7 +11,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -30,28 +29,47 @@ public class UsuarioService {
         this.empleadoRepository = empleadoRepository;
     }
 
-    // Obtener todos los usuarios
+    // =============================
+    // CONSULTAS
+    // =============================
+
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
     }
 
-    // Buscar usuario por ID
     public Optional<Usuario> findById(Integer id) {
         return usuarioRepository.findById(id);
     }
 
-    // Guardar o actualizar usuario (sin encriptar)
     public Usuario save(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
 
-    // Guardar nuevo usuario con contraseña encriptada
+    // =============================
+    // REGISTRO
+    // =============================
+
     public Usuario register(Usuario usuario) {
+
+        // Validar email único
+        if (usuarioRepository.existsByEmail(usuario.getEmail())) {
+            throw new RuntimeException("El correo ya está registrado.");
+        }
+
+        // Validar teléfono único
+        if (usuario.getTelefono() != null &&
+                usuarioRepository.existsByTelefono(usuario.getTelefono())) {
+            throw new RuntimeException("El número de teléfono ya está registrado.");
+        }
+
         usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
         return usuarioRepository.save(usuario);
     }
 
-    // Login: devuelve usuario si la contraseña coincide
+    // =============================
+    // LOGIN
+    // =============================
+
     public Optional<Usuario> login(String email, String password) {
         Optional<Usuario> userOpt = usuarioRepository.findByEmail(email);
         if (userOpt.isPresent() && passwordEncoder.matches(password, userOpt.get().getContrasena())) {
@@ -60,34 +78,47 @@ public class UsuarioService {
         return Optional.empty();
     }
 
-    // Eliminar usuario por ID
     public void deleteById(Integer id) {
         usuarioRepository.deleteById(id);
     }
 
-    // Buscar usuario por email
     public Optional<Usuario> findByEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }
 
-    // Buscar usuario por nombre
     public Optional<Usuario> findByNombre(String nombre) {
         return usuarioRepository.findByNombre(nombre);
     }
 
+    // =============================
+    // ACTUALIZAR USUARIO
+    // =============================
+
     @Transactional
     public Usuario updateUsuario(Integer id, UsuarioUpdateDto dto) {
-        // 1. Buscar usuario
+
         Usuario u = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // 2. Actualizar campos básicos
+        // --- Validación de email ---
+        if (dto.getEmail() != null && !dto.getEmail().equals(u.getEmail())) {
+            if (usuarioRepository.existsByEmail(dto.getEmail())) {
+                throw new RuntimeException("El correo ya está registrado por otro usuario.");
+            }
+            u.setEmail(dto.getEmail());
+        }
+
+        // --- Validación de teléfono ---
+        if (dto.getTelefono() != null && !dto.getTelefono().equals(u.getTelefono())) {
+            if (usuarioRepository.existsByTelefono(dto.getTelefono())) {
+                throw new RuntimeException("El teléfono ya está registrado por otro usuario.");
+            }
+            u.setTelefono(dto.getTelefono());
+        }
+
+        // Otros campos
         if (dto.getNombre() != null)
             u.setNombre(dto.getNombre());
-        if (dto.getEmail() != null)
-            u.setEmail(dto.getEmail());
-        if (dto.getTelefono() != null)
-            u.setTelefono(dto.getTelefono());
         if (dto.getDireccion() != null)
             u.setDireccion(dto.getDireccion());
         if (dto.getTipoUsuario() != null)
@@ -95,8 +126,12 @@ public class UsuarioService {
 
         Usuario actualizado = usuarioRepository.save(u);
 
-        // 3. Si es empleado, crear o actualizar Empleado
+        // =============================
+        // SI ES EMPLEADO -> CREAR / ACTUALIZAR
+        // =============================
+
         if (dto.getTipoUsuario() == Usuario.TipoUsuario.empleado) {
+
             Empleado empleado = empleadoRepository.findById(actualizado.getIdUsuario())
                     .orElseGet(() -> {
                         Empleado e = new Empleado();
@@ -105,13 +140,12 @@ public class UsuarioService {
                         return e;
                     });
 
-            // 4. Asignar rol desde DTO y calcular salario según rol
+            // Asignar rol
             if (dto.getRolEmpleado() != null) {
                 empleado.setRol(dto.getRolEmpleado());
                 empleado.setSalario(dto.getRolEmpleado().getSalario());
-                empleado.setHorario(Empleado.Rol.adopciones.getHorario());
+                empleado.setHorario(dto.getRolEmpleado().getHorario());
             } else {
-                // Si no se manda rol, asignamos adopciones por defecto
                 empleado.setRol(Empleado.Rol.adopciones);
                 empleado.setSalario(Empleado.Rol.adopciones.getSalario());
                 empleado.setHorario(Empleado.Rol.adopciones.getHorario());
